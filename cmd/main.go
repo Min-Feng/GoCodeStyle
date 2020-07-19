@@ -2,33 +2,33 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
-	"ddd/pkg/repository/local"
-	"ddd/pkg/repository/remote"
+	"ddd/pkg/infra/loghelper"
+	"ddd/pkg/repository/viper"
+	"ddd/pkg/unknown"
 
-	"ddd/pkg/domain"
+	"github.com/davecgh/go-spew/spew"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	var c domain.Config
-	c = NewConfig(LOCAL)
-
+	cfg := NewProjectConfig()
+	loghelper.Init(cfg.LogLevel, loghelper.HumanType)
+	c := spew.Sdump(cfg)
 	fmt.Println(c)
 }
 
-type ConfigType string
-
-const LOCAL ConfigType = "local"
-const REMOTE ConfigType = "remote"
-
-func NewConfig(c ConfigType) domain.Config {
-	var store domain.ConfigStore
-	switch c {
-	case LOCAL:
-		store = local.NewConfigStore()
-	case REMOTE:
-		store = remote.NewConfigStore()
+func NewProjectConfig() *unknown.ProjectConfig {
+	loghelper.Init(loghelper.InfoLevel, loghelper.HumanType)
+	configFileName := strings.ToLower(os.Getenv("RUN_ENV"))
+	if configFileName == "" {
+		log.Fatal().Msg("Not found environment variable 'RUN_ENV'")
 	}
-	config, _ := store.Find()
-	return config
+
+	vp := viper.New("./config", configFileName)
+	// vp := viper.New("./config", configFileName)
+	store := viper.NewProjectConfigStore(vp)
+	return store.Find()
 }

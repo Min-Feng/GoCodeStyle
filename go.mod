@@ -2,4 +2,9 @@ module ddd
 
 go 1.13
 
-replace go.etcd.io/etcd => github.com/etcd-io/etcd v0.5.0-alpha.5.0.20200520232829-54ba9589114f
+require (
+	github.com/davecgh/go-spew v1.1.1
+	github.com/mitchellh/mapstructure v1.3.2
+	github.com/rs/zerolog v1.19.0
+	github.com/spf13/viper v1.7.0
+)

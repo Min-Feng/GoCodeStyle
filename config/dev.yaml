@@ -1,0 +1,32 @@
+name: "ddd"
+port: "8080"
+alarm_email: ""
+log_level: 0 # enum = [0, 1] = [Debug, Info]
+
+repo:
+  mysql:
+    writer:
+      user: "root"
+      password: "1234"
+      host: "localhost"
+      port: "3306"
+    reader:
+      user: "root"
+      password: "1234"
+      host: "localhost"
+      port: "3307"
+  redis:
+    user: ""
+    password: ""
+    address: "192.168.10.1:6379, 192.168.10.2:6379, 192.168.10.3:6379"
+  elasticsearch:
+    user: ""
+    password: ""
+    host: "localhost"
+    port: "9200"
+    ca_path: ""
+  kafka:
+    user: ""
+    password: ""
+    host: "localhost"
+    port: ""
