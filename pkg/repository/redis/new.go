@@ -1,14 +1,10 @@
 package redis
 
 type Config struct {
-	User     string   `key:"user"`
-	Password string   `key:"password"`
-	Address  []string `key:"address"`
+	User     string   `configs:"user"`
+	Password string   `configs:"password"`
+	Address  []string `configs:"address"`
 }
 
-func NewClient(cfg Config) Client {
-	return Client{}
-}
-
-type Client struct {
+func New(cfg Config) {
 }

@@ -5,12 +5,11 @@ import (
 	"os"
 	"strings"
 
-	"ddd/pkg/infra/loghelper"
-	"ddd/pkg/repository/viper"
-	"ddd/pkg/unknown"
-
 	"github.com/davecgh/go-spew/spew"
 	"github.com/rs/zerolog/log"
+
+	"ddd/pkg/configs"
+	"ddd/pkg/infra/loghelper"
 )
 
 func main() {
@@ -20,15 +19,14 @@ func main() {
 	fmt.Println(c)
 }
 
-func NewProjectConfig() *unknown.ProjectConfig {
-	loghelper.Init(loghelper.InfoLevel, loghelper.HumanType)
+func NewProjectConfig() *configs.ProjectConfig {
+	loghelper.Init(loghelper.DefaultLevel, loghelper.HumanType)
 	configFileName := strings.ToLower(os.Getenv("RUN_ENV"))
 	if configFileName == "" {
 		log.Fatal().Msg("Not found environment variable 'RUN_ENV'")
 	}
 
-	vp := viper.New("./config", configFileName)
-	// vp := viper.New("./config", configFileName)
-	store := viper.NewProjectConfigStore(vp)
+	store := configs.NewLocalProjectConfigStore(configFileName, "./config", "../config")
+	// vp := viper.NewLocalProjectConfigStore("./config", configFileName)
 	return store.Find()
 }
