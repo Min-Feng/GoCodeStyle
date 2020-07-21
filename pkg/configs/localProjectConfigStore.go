@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// configPath 設置多個, 是因為二進位執行檔, 可能在 go module 根目錄執行 或 com 目錄執行
 func NewLocalProjectConfigStore(configFileName string, configPath ...string) ProjectConfigStore {
 	if configPath == nil || configFileName == "" {
 		log.Fatal().Msg("Not found: configPath or configFileName is empty string")

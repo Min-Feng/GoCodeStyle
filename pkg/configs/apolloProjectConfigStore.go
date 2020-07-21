@@ -10,7 +10,7 @@ import (
 const (
 	ApolloAppID      = "hello"
 	ApolloCluster    = "default"
-	ApolloNamespaces = "default"
+	ApolloNamespaces = "applications"
 )
 
 func NewApolloProjectConfigStore(remoteAddress string) ProjectConfigStore {
@@ -21,7 +21,11 @@ func NewApolloProjectConfigStore(remoteAddress string) ProjectConfigStore {
 	vp := viper.New()
 	vp.SetConfigType("prop")
 
-	vp.AddRemoteProvider("apollo", remoteAddress, ApolloNamespaces)
+	if err := vp.AddRemoteProvider("apollo", remoteAddress, ApolloNamespaces); err != nil {
+		log.Fatal().
+			Str("ApolloRemoteAddress", remoteAddress).
+			Msgf("Viper add remote provider failed: %v:", err)
+	}
 
 	if err := vp.ReadRemoteConfig(); err != nil {
 		log.Fatal().Msg("Reading config: " + err.Error())

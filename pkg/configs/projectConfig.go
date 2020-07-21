@@ -14,7 +14,7 @@ type ProjectConfig struct {
 	Name       string          `configs:"name"`
 	Port       string          `configs:"port"`
 	AlarmEmail string          `configs:"alarm_email"`
-	LogLevel   loghelper.Level `configs:"log_level"` // enum = [0, 1] = [Debug, Info]
+	LogLevel   loghelper.Level `configs:"log_level"`
 
 	Repo struct {
 		MySQL struct {

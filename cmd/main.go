@@ -6,27 +6,27 @@ import (
 	"strings"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/rs/zerolog/log"
 
 	"ddd/pkg/configs"
 	"ddd/pkg/infra/loghelper"
 )
 
+// 有 init 表示存在全域變數, 非開發 lib 的專案, 全域變數不是好選擇
+// 如果要使用 init 盡量不使用隱式 init, 而是顯式 Init
+// 且集中放在程式的入口處, 通常會是 cmd/main.go
+// 明顯設置 Init 可以讓其他維護者知道要注意全域
+//
+// 由於還沒讀取到 config 的設定
+// 不知道 log level, 所以先使用一個預設等級
+func init() {
+	DefaultLevel := loghelper.InfoLevel
+	loghelper.Init(DefaultLevel, loghelper.HumanType)
+}
+
 func main() {
-	cfg := NewProjectConfig()
+	configSRC := strings.ToLower(os.Getenv("CONF_SRC"))
+	cfg := configs.NewProjectConfig(configSRC)
 	loghelper.Init(cfg.LogLevel, loghelper.HumanType)
 	c := spew.Sdump(cfg)
 	fmt.Println(c)
-}
-
-func NewProjectConfig() *configs.ProjectConfig {
-	loghelper.Init(loghelper.DefaultLevel, loghelper.HumanType)
-	configFileName := strings.ToLower(os.Getenv("RUN_ENV"))
-	if configFileName == "" {
-		log.Fatal().Msg("Not found environment variable 'RUN_ENV'")
-	}
-
-	store := configs.NewLocalProjectConfigStore(configFileName, "./config", "../config")
-	// vp := viper.NewLocalProjectConfigStore("./config", configFileName)
-	return store.Find()
 }
