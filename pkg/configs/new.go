@@ -13,7 +13,7 @@ const (
 	APOLLO ConfigSource = "apollo"
 )
 
-func NewProjectConfig(src string) *ProjectConfig {
+func NewProjectConfig(src ConfigSource) *ProjectConfig {
 	var store ProjectConfigStore
 
 	switch src {
