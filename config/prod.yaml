@@ -1,4 +1,4 @@
-name: "ddd"
+name: "prod"
 port: "8080"
 alarm_email: ""
 

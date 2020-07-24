@@ -27,14 +27,15 @@ func TimeNow(fakeDate string) func() time.Time {
 
 		for _, spec := range timeSpec {
 			fakeTime, err = time.ParseInLocation(spec, fakeDate, time.Local)
-			if err != nil {
-				continue
+			if err == nil {
+				return fakeTime
 			}
-			return
 		}
 
-		//noinspection GoNilness
-		log.Fatal().Msg("Create fake time.Now() failed: " + err.Error())
-		return
+		if err != nil {
+			//noinspection GoNilness
+			log.Fatal().Msg("Create fake time.Now() failed: " + err.Error())
+		}
+		return fakeTime
 	}
 }

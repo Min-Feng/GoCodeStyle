@@ -18,7 +18,8 @@ func NewProjectConfig(src ConfigSource) *ProjectConfig {
 
 	switch src {
 	case LOCAL:
-		store = NewLocalProjectConfigStore("dev", "./config", "../config")
+		fileName := os.Getenv("FILE_NAME")
+		store = NewLocalProjectConfigStore(fileName, "./config", "../config")
 	case APOLLO:
 		ip := os.Getenv("APOLLO_ADDRESS")
 		store = NewApolloProjectConfigStore(ip)

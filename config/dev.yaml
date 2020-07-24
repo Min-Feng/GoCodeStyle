@@ -1,4 +1,4 @@
-name: "ddd"
+name: "dev"
 port: "8080"
 alarm_email: ""
 log_level: 0 # enum = [0, 1] = [Debug, Info]

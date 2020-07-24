@@ -1,5 +1,9 @@
 package loghelper
 
+// 此套件的目的, 主要是針對 zerolog 的全域值進行控管
+// 若有其他套件需要注入 logger
+// 也可以在此輔助套件, 進行實現
+
 import (
 	"fmt"
 	"io"
@@ -31,6 +35,11 @@ const (
 //noinspection GoUnusedExportedFunction
 func GlobalLevel() Level {
 	return zerolog.GlobalLevel()
+}
+
+// InitAtUnitTest 專門提供給單元測試時使用, 避免 go test 輸出時, 有多餘 log 訊息
+func InitAtUnitTest() {
+	Init(ErrorLevel, HumanType)
 }
 
 // Init can set global logLevel = [0, 1, 3] = [Debug, Info, Error]

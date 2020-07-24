@@ -16,7 +16,10 @@ const (
 func NewApolloProjectConfigStore(remoteAddress string) ProjectConfigStore {
 	remote.SetAppID(ApolloAppID)
 	remote.SetConfigType("prop")
-	remote.SetAgolloOptions(agollo.Cluster(ApolloCluster), agollo.PreloadNamespaces(ApolloNamespaces))
+	remote.SetAgolloOptions(
+		agollo.Cluster(ApolloCluster),
+		agollo.DefaultNamespace(ApolloNamespaces),
+	)
 
 	vp := viper.New()
 	vp.SetConfigType("prop")
