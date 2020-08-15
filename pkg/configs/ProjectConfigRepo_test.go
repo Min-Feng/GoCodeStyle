@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	loghelper.ForUnitTest()
+	loghelper.UnitTestSetting()
 }
 
 func TestProjectConfigRepo(t *testing.T) {

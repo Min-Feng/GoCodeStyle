@@ -14,15 +14,15 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// ForUnitTest 專門提供給單元測試時使用, 避免 go test 輸出時, 有多餘 log 訊息
-func ForUnitTest() {
+// UnitTestSetting 專門提供給單元測試時使用, 避免 go test 輸出時, 有多餘 log 訊息
+func UnitTestSetting() {
 	Init(ErrorLevel, WriterKindHuman)
 }
 
-// ForDeveloper 進行單元測試期間, 查看輸出 log 是否符合預期格式
+// DevelopSetting 進行單元測試期間, 查看輸出 log 是否符合預期格式
 //
 //noinspection GoUnusedExportedFunction
-func ForDeveloper() {
+func DevelopSetting() {
 	Init(DebugLevel, WriterKindHuman)
 }
 

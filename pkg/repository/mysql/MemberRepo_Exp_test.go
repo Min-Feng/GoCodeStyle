@@ -46,7 +46,7 @@ func TestMemberRepo_Add(t *testing.T) {
 }
 
 func TestMemberRepo_Find(t *testing.T) {
-	loghelper.ForDeveloper()
+	loghelper.DevelopSetting()
 	cfg := testtool.Config()
 	db := mysql.NewDB(&cfg.Mysql)
 	repo := mysql.NewMemberRepo(db)
