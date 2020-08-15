@@ -1,60 +1,53 @@
+// Package loghelper 主要用途
+// 是針對 zerolog 的全域值進行控管
+// 若第三方套件有提供 logger interface
+// 相關 logger implement 也可以在 loghelper 內部進行實現
 package loghelper
-
-// 此套件的目的, 主要是針對 zerolog 的全域值進行控管
-// 若有其他套件需要注入 logger
-// 也可以在此輔助套件, 進行實現
 
 import (
 	"fmt"
 	"io"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
-type Level = zerolog.Level
+// ForUnitTest 專門提供給單元測試時使用, 避免 go test 輸出時, 有多餘 log 訊息
+func ForUnitTest() {
+	Init(ErrorLevel, WriterKindHuman)
+}
 
-//noinspection GoUnusedConst
-const (
-	DebugLevel = zerolog.DebugLevel // 0
-	InfoLevel  = zerolog.InfoLevel  // 1
-	ErrorLevel = zerolog.ErrorLevel // 3, for unit test
-)
-
-type WriterType string
-
-//noinspection GoUnusedConst
-const (
-	JSONType  WriterType = "json"
-	HumanType WriterType = "human"
-)
-
+// ForDeveloper 進行單元測試期間, 查看輸出 log 是否符合預期格式
+//
 //noinspection GoUnusedExportedFunction
-func GlobalLevel() Level {
-	return zerolog.GlobalLevel()
+func ForDeveloper() {
+	Init(DebugLevel, WriterKindHuman)
 }
 
-// InitAtUnitTest 專門提供給單元測試時使用, 避免 go test 輸出時, 有多餘 log 訊息
-func InitAtUnitTest() {
-	Init(ErrorLevel, HumanType)
-}
+// Init can set global logLevel = ["debug", "info", "error"]
+// wKind = ["json", "human"]
+func Init(logLevel Level, wKind WriterKind) {
+	switch logLevel {
+	case DebugLevel:
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	case InfoLevel:
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	case ErrorLevel:
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	default:
+		panic("Init log package failed: invalid log level")
+	}
 
-// Init can set global logLevel = [0, 1, 3] = [Debug, Info, Error]
-// wType = ["json", "human"]
-func Init(logLevel Level, wType WriterType) {
-	zerolog.SetGlobalLevel(logLevel)
-
-	switch wType {
-	case HumanType:
+	switch wKind {
+	case WriterKindHuman:
 		writer := newConsoleWriter()
 		log.Logger = log.Output(writer).With().Caller().Logger()
-	case JSONType:
+	case WriterKindJSON:
 		log.Logger = log.Output(os.Stdout)
 	default:
-		panic("Init log package failed")
+		panic("Init log package failed: invalid writer kind")
 	}
 }
 
@@ -62,15 +55,15 @@ func newConsoleWriter() io.Writer {
 	writer := &zerolog.ConsoleWriter{
 		Out:          os.Stdout,
 		NoColor:      true,
-		TimeFormat:   time.RFC3339,
+		TimeFormat:   "2006-01-02 15:04:05Z07:00",
 		FormatLevel:  func(i interface{}) string { return strings.ToUpper(fmt.Sprintf("[%v]", i)) },
-		FormatCaller: longFileFormatCaller("GoProjectLayout/"),
+		FormatCaller: longFileFormatCaller("GoCodeStyle/"),
 	}
 	return writer
 }
 
 // log 執行時, 輸出所在檔案 及 go module 為根目錄的相對路徑目錄
-// example: pkg/configs/localProjectConfigStore.go:26
+// example: pkg/configs/LocalRepo.go:26
 func longFileFormatCaller(moduleDirectory ...string) zerolog.Formatter {
 	return func(i interface{}) string {
 		filePath := i.(string)
@@ -91,7 +84,7 @@ func longFileFormatCaller(moduleDirectory ...string) zerolog.Formatter {
 }
 
 // log 執行時, 輸出所在檔案 及 其目錄
-// example: configs/localProjectConfigStore.go:26
+// example: configs/LocalRepo.go:26
 //
 //nolint:deadcode
 //noinspection GoUnusedFunction

@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+
+	"ddd/pkg/adapter"
 )
 
 //nolint:gochecknoglobals
@@ -21,7 +23,7 @@ var timeSpec = []string{
 
 // 若假冒的時間有時區資訊, 只有0時區 UTC 用 Z
 // 其他時區要用 +-, 例如 2055-04-01T22:13:47-01:00
-func TimeNow(fakeDate string) func() time.Time {
+func NewTimeNowFunc(fakeDate string) adapter.TimeNowFunc {
 	return func() (fakeTime time.Time) {
 		var err error
 
