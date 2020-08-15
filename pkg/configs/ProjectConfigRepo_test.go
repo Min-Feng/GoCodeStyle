@@ -24,7 +24,6 @@ type ProjectConfigRepoTestSuite struct {
 }
 
 func (ts *ProjectConfigRepoTestSuite) TestFind() {
-	loghelper.ForDeveloper()
 	tests := []struct {
 		name             string
 		repo             configs.ProjectConfigRepo
@@ -46,7 +45,7 @@ func (ts *ProjectConfigRepoTestSuite) TestFind() {
 		// 	expectConfigName: "prod",
 		// },
 		{
-			name:             "Read_Mock_Store",
+			name:             "Read_Mock_Repo",
 			repo:             mock.ProjectConfigRepo{},
 			expectConfigName: "mock",
 		},

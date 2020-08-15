@@ -11,6 +11,7 @@ run:
 
   build-tags:
     - integration
+    - experiment
 
 linters-settings:
   gocyclo:
