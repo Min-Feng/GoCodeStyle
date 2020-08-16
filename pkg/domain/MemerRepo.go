@@ -1,6 +1,8 @@
 package domain
 
-import "time"
+import (
+	"ddd/pkg/adapter"
+)
 
 type MemberRepo interface {
 	Find(memberID string) (*Member, error)
@@ -8,7 +10,7 @@ type MemberRepo interface {
 }
 
 type Member struct {
-	MemberID    string     `db:"member_id"`
-	CreatedDate *time.Time `db:"created_date"`
-	SelfIntro   *string    `db:"self_intro"`
+	MemberID    string       `db:"member_id"`
+	CreatedDate adapter.Time `db:"created_date"`
+	SelfIntro   *string      `db:"self_intro"`
 }

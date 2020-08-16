@@ -14,4 +14,5 @@ require (
 	github.com/shima-park/agollo v1.2.6
 	github.com/spf13/viper v1.7.0
 	github.com/stretchr/testify v1.6.1
+	github.com/tdewolff/minify/v2 v2.8.0
 )

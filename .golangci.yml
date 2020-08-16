@@ -65,7 +65,12 @@ issues:
         - gocyclo
         - gomnd
         - errcheck
+
     - path: pkg/mock
+      linters:
+        - gomnd
+
+    - path: pkg/testtool
       linters:
         - gomnd
 

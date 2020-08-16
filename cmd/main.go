@@ -29,6 +29,7 @@ func main() {
 	loghelper.Init(cfg.LogLevel, loghelper.WriterKindHuman)
 
 	mysql.NewDB(&cfg.Mysql)
+
 }
 
 func NewConfig(src string) *configs.ProjectConfig {

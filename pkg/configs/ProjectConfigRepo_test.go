@@ -25,34 +25,34 @@ type ProjectConfigRepoTestSuite struct {
 
 func (ts *ProjectConfigRepoTestSuite) TestFind() {
 	tests := []struct {
-		name             string
-		repo             configs.ProjectConfigRepo
-		expectConfigName string
+		name               string
+		repo               configs.ProjectConfigRepo
+		expectedConfigName string
 	}{
 		{
-			name:             "Read_Local_File_Dev",
-			repo:             configs.NewLocalProjectConfigRepo("dev", "../../config"),
-			expectConfigName: "dev",
+			name:               "Read_Local_File_Dev",
+			repo:               configs.NewLocalProjectConfigRepo("dev", "../../config"),
+			expectedConfigName: "dev",
 		},
 		// {
 		// 	name:             "Read_Local_File_Test",
 		// 	repo:            configs.NewLocalProjectConfigRepo("test", "../../config"),
-		// 	expectConfigName: "test",
+		// 	expectedConfigName: "test",
 		// },
 		// {
 		// 	name:             "Read_Local_File_Prod",
 		// 	repo:            configs.NewLocalProjectConfigRepo("prod", "../../config"),
-		// 	expectConfigName: "prod",
+		// 	expectedConfigName: "prod",
 		// },
 		{
-			name:             "Read_Mock_Repo",
-			repo:             mock.ProjectConfigRepo{},
-			expectConfigName: "mock",
+			name:               "Read_Mock_Repo",
+			repo:               mock.ProjectConfigRepo{},
+			expectedConfigName: "mock",
 		},
 		// {
 		// 	name:             "Read_Remote_Config",
 		// 	repo:            configs.NewApolloProjectConfigRepo(""),
-		// 	expectConfigName: "apollo",
+		// 	expectedConfigName: "apollo",
 		// },
 	}
 
@@ -61,7 +61,7 @@ func (ts *ProjectConfigRepoTestSuite) TestFind() {
 		tt := tt
 		ts.Run(tt.name, func() {
 			actualConfig := tt.repo.Find()
-			assert.Equal(ts.T(), tt.expectConfigName, actualConfig.Name)
+			assert.Equal(ts.T(), tt.expectedConfigName, actualConfig.Name)
 		})
 	}
 }

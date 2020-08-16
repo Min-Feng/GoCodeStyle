@@ -1,9 +1,12 @@
-package mysql
+package mysql_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
+
+	"ddd/pkg/repository/mysql"
+	"ddd/pkg/testtool"
 )
 
 func TestGenericSQLBuilder(t *testing.T) {
@@ -12,11 +15,15 @@ func TestGenericSQLBuilder(t *testing.T) {
 
 type GenericSQLBuilderTestSuite struct {
 	suite.Suite
-	b GenericSQLBuilder
+	b mysql.GenericSQLBuilder
 }
 
 func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {
-	actualSQLString, _ := ts.b.IsTheRowExist("member_id", 2, MemberTableName)
-	expectSQLString := "SELECT member_id FROM member WHERE member_id = ? FOR UPDATE"
-	ts.Assert().Equal(expectSQLString, actualSQLString)
+	actualSQLString, _ := ts.b.IsTheRowExist("member_id", 2, mysql.MemberTableName)
+	expectedSQLString := testtool.FormatToRawSQL(`
+			SELECT member_id 
+			FROM member 
+			WHERE member_id = ? 
+			FOR UPDATE`)
+	ts.Assert().Equal(expectedSQLString, actualSQLString)
 }

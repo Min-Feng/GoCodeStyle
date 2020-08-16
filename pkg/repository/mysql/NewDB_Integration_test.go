@@ -12,7 +12,6 @@ import (
 )
 
 func TestNewDB(t *testing.T) {
-	// loghelper.ForDeveloper()
 	cfg := testtool.Config()
 	db := mysql.NewDB(&cfg.Mysql)
 	assert.NotNil(t, db)

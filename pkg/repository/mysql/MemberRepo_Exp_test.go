@@ -7,13 +7,16 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"ddd/pkg/adapter"
 	"ddd/pkg/domain"
 	"ddd/pkg/loghelper"
+	"ddd/pkg/mock"
 	"ddd/pkg/repository/mysql"
 	"ddd/pkg/testtool"
 )
 
 func TestMemberRepo_Add(t *testing.T) {
+	loghelper.DevelopSetting()
 	cfg := testtool.Config()
 	db := mysql.NewDB(&cfg.Mysql)
 	repo := mysql.NewMemberRepo(db)
@@ -22,12 +25,12 @@ func TestMemberRepo_Add(t *testing.T) {
 		name   string
 		member *domain.Member
 	}{
-		// {
-		// 	member: &domain.Member{
-		// 		MemberID: "c5",
-		// 		// CreatedDate: mock.NewTimeNowFunc("2020-12-31T07:33:25")(),
-		// 	},
-		// },
+		{
+			member: &domain.Member{
+				MemberID:    "c5",
+				CreatedDate: adapter.Time{Time: mock.NewTimeNowFunc("1988-05-14T07:33:25")()},
+			},
+		},
 		// {
 		// 	member: &domain.Member{
 		// 		MemberID:    "f5",
@@ -51,6 +54,6 @@ func TestMemberRepo_Find(t *testing.T) {
 	db := mysql.NewDB(&cfg.Mysql)
 	repo := mysql.NewMemberRepo(db)
 
-	_, err := repo.Find("e5")
+	_, err := repo.Find("c5")
 	assert.NoError(t, err)
 }

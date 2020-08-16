@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"strings"
+	"database/sql"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/davecgh/go-spew/spew"
@@ -29,7 +29,7 @@ func (repo *MemberRepo) Find(memberID string) (*domain.Member, error) {
 	sqlString, args := repo.sqlBuilder.Find(memberID)
 	err := repo.db.Get(member, sqlString, args...)
 	if err != nil {
-		if strings.Contains(err.Error(), ErrMsgNotFound) {
+		if err == sql.ErrNoRows {
 			return nil, failure.Translate(err, domain.ErrNotFound, failure.Message("mysql select"))
 		}
 		return nil, failure.Wrap(err, failure.Message("mysql select"))
@@ -50,6 +50,7 @@ func (repo *MemberRepo) Add(m *domain.Member) error {
 
 	if log.Debug().Enabled() {
 		id, _ := result.LastInsertId()
+		// 由於 memberID 不是用 AUTO INCREMENT, 所以返回零
 		log.Debug().Int64("member_id", id).Msg("MemberRepo mysql insert row:")
 	}
 	return nil
@@ -74,7 +75,6 @@ func (MemberRepoSQLBuilder) Add(m *domain.Member) (string, []interface{}) {
 	sqlString, args, err := sq.
 		Insert(MemberTableName).
 		Columns("member_id", "created_date", "self_intro").
-		// Values(m.MemberID, m.CreatedDate, m.SelfIntro).
 		Values(m.MemberID, m.CreatedDate, m.SelfIntro).
 		ToSql()
 	if err != nil {
