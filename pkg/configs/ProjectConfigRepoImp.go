@@ -13,11 +13,11 @@ type projectConfigStore struct {
 	*viper.Viper
 }
 
-func (store *projectConfigStore) Find() *ProjectConfig {
+func (repo *projectConfigStore) Find() *ProjectConfig {
 	cfg := new(ProjectConfig)
 
 	option := func(c *mapstructure.DecoderConfig) { c.TagName = "configs" }
-	if err := store.Viper.Unmarshal(cfg, option); err != nil {
+	if err := repo.Viper.Unmarshal(cfg, option); err != nil {
 		log.Fatal().Err(err).Msg("Unmarshal ProjectConfig failed:")
 		return nil
 	}

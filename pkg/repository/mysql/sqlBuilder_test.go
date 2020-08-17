@@ -15,11 +15,11 @@ func TestGenericSQLBuilder(t *testing.T) {
 
 type GenericSQLBuilderTestSuite struct {
 	suite.Suite
-	b mysql.GenericSQLBuilder
+	gSQL mysql.GenericSQLBuilder
 }
 
 func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {
-	actualSQLString, _ := ts.b.IsTheRowExist("member_id", 2, mysql.MemberTableName)
+	actualSQLString, _ := ts.gSQL.IsTheRowExist("member_id", 2, mysql.MemberTableName)
 	expectedSQLString := testtool.FormatToRawSQL(`
 			SELECT member_id 
 			FROM member 

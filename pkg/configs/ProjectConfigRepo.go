@@ -14,5 +14,5 @@ type ProjectConfig struct {
 	Port       string          `configs:"port"`
 	AlarmEmail string          `configs:"alarm_email"`
 	LogLevel   loghelper.Level `configs:"log_level"`
-	Mysql      mysql.Config    `configs:"mysql"`
+	MySQL      mysql.Config    `configs:"mysql"`
 }

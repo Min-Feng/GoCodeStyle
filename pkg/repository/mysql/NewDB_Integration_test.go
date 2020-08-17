@@ -13,6 +13,6 @@ import (
 
 func TestNewDB(t *testing.T) {
 	cfg := testtool.Config()
-	db := mysql.NewDB(&cfg.Mysql)
+	db := mysql.NewDB(&cfg.MySQL)
 	assert.NotNil(t, db)
 }

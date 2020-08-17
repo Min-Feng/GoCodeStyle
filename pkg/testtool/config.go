@@ -11,14 +11,14 @@ func Config() *configs.ProjectConfig {
 		Port:       "",
 		AlarmEmail: "",
 		LogLevel:   "",
-		Mysql: mysql.Config{
+		MySQL: mysql.Config{
 			User:        "root",
 			Password:    "1234",
 			Host:        "127.0.0.1",
 			Port:        "3306",
 			Database:    "GoCodeStyle",
-			MaxConn:     10,
-			MaxIdleConn: 5,
+			MaxConn:     8,
+			MaxIdleConn: 2,
 		},
 	}
 }

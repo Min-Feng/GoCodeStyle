@@ -1,6 +1,6 @@
 package loghelper
 
-type Level string
+type Level = string
 
 //noinspection GoUnusedConst
 const (
@@ -9,7 +9,7 @@ const (
 	ErrorLevel Level = "error" // for unit test
 )
 
-type WriterKind string
+type WriterKind = string
 
 //noinspection GoUnusedConst
 const (

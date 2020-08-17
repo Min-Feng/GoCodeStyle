@@ -11,7 +11,7 @@ import (
 	"ddd/pkg/repository/mysql"
 )
 
-// 有 init 表示存在全域變數, 非開發 lib 的專案, 全域變數不是好選擇
+// 有 init 表示存在全域變數, 非 lib 類型的專案, 全域變數不是好選擇
 // 如果要使用 init 盡量不使用隱式 init, 而是顯式 Init
 // 且集中放在程式的入口處, 通常會是 cmd/main.go
 // 明顯設置 Init 可以讓其他維護者知道要注意全域
@@ -24,11 +24,13 @@ func init() {
 }
 
 func main() {
+	log.Info().Msg("MainStart")
+
 	configSRC := strings.ToLower(os.Getenv("CONF_SRC"))
 	cfg := NewConfig(configSRC)
 	loghelper.Init(cfg.LogLevel, loghelper.WriterKindHuman)
 
-	mysql.NewDB(&cfg.Mysql)
+	mysql.NewDB(&cfg.MySQL)
 
 }
 

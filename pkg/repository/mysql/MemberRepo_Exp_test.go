@@ -18,7 +18,7 @@ import (
 func TestMemberRepo_Add(t *testing.T) {
 	loghelper.DevelopSetting()
 	cfg := testtool.Config()
-	db := mysql.NewDB(&cfg.Mysql)
+	db := mysql.NewDB(&cfg.MySQL)
 	repo := mysql.NewMemberRepo(db)
 
 	tests := []struct {
@@ -51,7 +51,7 @@ func TestMemberRepo_Add(t *testing.T) {
 func TestMemberRepo_Find(t *testing.T) {
 	loghelper.DevelopSetting()
 	cfg := testtool.Config()
-	db := mysql.NewDB(&cfg.Mysql)
+	db := mysql.NewDB(&cfg.MySQL)
 	repo := mysql.NewMemberRepo(db)
 
 	_, err := repo.Find("c5")
