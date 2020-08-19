@@ -81,3 +81,7 @@ issues:
     - linters:
         - golint
       text: "returns unexported"
+
+    - linters:
+        - govet
+      text: "composite literal uses unkeyed fields"

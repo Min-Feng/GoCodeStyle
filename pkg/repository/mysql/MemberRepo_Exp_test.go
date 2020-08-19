@@ -27,8 +27,8 @@ func TestMemberRepo_Add(t *testing.T) {
 	}{
 		{
 			member: &domain.Member{
-				MemberID:    "c5",
-				CreatedDate: adapter.Time{Time: mock.NewTimeNowFunc("1988-05-14T07:33:25")()},
+				MemberID:    "a1",
+				CreatedDate: adapter.Time{Time: mock.NewTimeNowFunc("1988-05-14")()},
 			},
 		},
 		// {

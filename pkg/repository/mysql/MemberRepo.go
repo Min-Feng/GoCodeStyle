@@ -26,7 +26,7 @@ type MemberRepo struct {
 func (repo *MemberRepo) Find(memberID string) (*domain.Member, error) {
 	member := new(domain.Member)
 
-	sqlString, args := repo.sqlBuilder.Find(memberID)
+	sqlString, args, _ := repo.sqlBuilder.Find(memberID).ToSql()
 	err := repo.db.Get(member, sqlString, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -42,7 +42,7 @@ func (repo *MemberRepo) Find(memberID string) (*domain.Member, error) {
 }
 
 func (repo *MemberRepo) Add(m *domain.Member) error {
-	sqlString, args := repo.sqlBuilder.Add(m)
+	sqlString, args, _ := repo.sqlBuilder.Add(m).ToSql()
 	result, err := repo.db.Exec(sqlString, args...)
 	if err != nil {
 		return failure.Wrap(err, failure.Message("mysql insert"))
@@ -58,27 +58,17 @@ func (repo *MemberRepo) Add(m *domain.Member) error {
 
 type MemberRepoSQLBuilder struct{}
 
-func (MemberRepoSQLBuilder) Find(memberID string) (string, []interface{}) {
-	sqlString, args, err := sq.
+func (MemberRepoSQLBuilder) Find(memberID string) sq.Sqlizer {
+	return sq.
 		Select("*").
 		From(MemberTableName).
 		Where(sq.Eq{"member_id": memberID}).
-		OrderBy("created_date DESC").
-		ToSql()
-	if err != nil {
-		log.Error().Err(err).Msg("Build sql string 'MemberRepo.Find' failed:")
-	}
-	return sqlString, args
+		OrderBy("created_date DESC")
 }
 
-func (MemberRepoSQLBuilder) Add(m *domain.Member) (string, []interface{}) {
-	sqlString, args, err := sq.
+func (MemberRepoSQLBuilder) Add(m *domain.Member) sq.Sqlizer {
+	return sq.
 		Insert(MemberTableName).
 		Columns("member_id", "created_date", "self_intro").
-		Values(m.MemberID, m.CreatedDate, m.SelfIntro).
-		ToSql()
-	if err != nil {
-		log.Error().Err(err).Msg("Build sql string 'MemberRepo.Add' failed:")
-	}
-	return sqlString, args
+		Values(m.MemberID, m.CreatedDate, m.SelfIntro)
 }

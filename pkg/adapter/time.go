@@ -32,7 +32,18 @@ func (t Time) Value() (driver.Value, error) {
 	if t.IsZero() {
 		return nil, nil
 	}
-	return t.Time, nil
+	return t.sqlDatetime(), nil
+}
+
+// sqlDatetime 主要用在 sql where 的地方, 且該欄位在資料庫為 datetime 型別
+// 因為不知道底層是怎麼轉換 time.Time
+// 所以採用顯式轉換字串格式, 避免輸出的格式不如預期, 造成 sql index 失效
+func (t Time) sqlDatetime() string {
+	return t.Format("2006-01-02 15:04:05")
+}
+
+func (t Time) sqlUnix() int64 {
+	return t.Unix()
 }
 
 func (t *Time) Scan(src interface{}) error {
@@ -49,13 +60,6 @@ func (t *Time) Scan(src interface{}) error {
 
 	t.Time = helper.Time
 	return nil
-}
-
-// SQLDatetime 主要用在 sql where 的地方, 且該欄位在資料庫為 datetime 型別
-// 因為不知道底層是怎麼轉換 time.Time
-// 所以採用顯式轉換字串格式, 避免輸出的格式不如預期, 造成 sql index 失效
-func (t *Time) SQLDatetime() string {
-	return t.Format("2006-01-02 15:04:05")
 }
 
 // 標準庫 time.Time 其 json.Marshal 的時間格式: "2020-08-16T23:22:55+08:00"
