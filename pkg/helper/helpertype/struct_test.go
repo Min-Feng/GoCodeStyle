@@ -18,11 +18,11 @@ func TestStructFilterZeroValueField(t *testing.T) {
 
 	tests := []struct {
 		name        string
-		cond        QueryCondition
+		rawStruct   QueryCondition
 		expectedMap map[helpertype.FieldName]interface{}
 	}{
 		{
-			cond: QueryCondition{
+			rawStruct: QueryCondition{
 				UserName: "caesar",
 				Orders:   []string{"book", "tea"},
 			},
@@ -32,7 +32,7 @@ func TestStructFilterZeroValueField(t *testing.T) {
 			},
 		},
 		{
-			cond: QueryCondition{
+			rawStruct: QueryCondition{
 				CreatedTime: mock.CustomizedTime("2020-08-23"),
 				UserName:    "caesar",
 			},
@@ -41,12 +41,17 @@ func TestStructFilterZeroValueField(t *testing.T) {
 				"user_name":    "caesar",
 			},
 		},
+		{
+			name:        "All Zero value fields",
+			rawStruct:   QueryCondition{},
+			expectedMap: nil,
+		},
 	}
 
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			actualMap := helpertype.StructFilterZeroValueField(tt.cond, "db")
+			actualMap := helpertype.StructFilterZeroValueField(tt.rawStruct, "db")
 			assert.Equal(t, tt.expectedMap, actualMap)
 		})
 	}

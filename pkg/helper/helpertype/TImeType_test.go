@@ -6,14 +6,9 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/helper/helperlog"
 	"ddd/pkg/helper/helpertest/mock"
 	"ddd/pkg/helper/helpertype"
 )
-
-func init() {
-	helperlog.UnitTestSetting()
-}
 
 func TestTime(t *testing.T) {
 	suite.Run(t, new(TimeTestSuite))
