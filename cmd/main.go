@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"ddd/pkg/configs"
-	"ddd/pkg/loghelper"
+	"ddd/pkg/helper/helperlog"
 	"ddd/pkg/repository/mysql"
 )
 
@@ -19,8 +19,8 @@ import (
 // 由於還沒讀取到 config 的設定
 // 不知道 log level, 所以先使用一個預設等級
 func init() {
-	DefaultLevel := loghelper.InfoLevel
-	loghelper.Init(DefaultLevel, loghelper.WriterKindHuman)
+	DefaultLevel := helperlog.InfoLevel
+	helperlog.Init(DefaultLevel, helperlog.WriterKindHuman)
 }
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 
 	configSRC := strings.ToLower(os.Getenv("CONF_SRC"))
 	cfg := NewConfig(configSRC)
-	loghelper.Init(cfg.LogLevel, loghelper.WriterKindHuman)
+	helperlog.Init(cfg.LogLevel, helperlog.WriterKindHuman)
 
 	mysql.NewDB(&cfg.MySQL)
 }
@@ -40,12 +40,12 @@ func NewConfig(src string) *configs.ProjectConfig {
 	case "local":
 		fileName := os.Getenv("FILE_NAME")
 		// 因為不確定 開發者會在什麼地方執行 go run, 專案根目錄 或 cmd 目錄
-		repo = configs.NewLocalProjectConfigRepo(fileName, "./config", "../config")
+		repo = configs.NewLocalRepo(fileName, "./config", "../config")
 	case "apollo":
 		ip := os.Getenv("APOLLO_ADDRESS")
-		repo = configs.NewApolloProjectConfigRepo(ip)
+		repo = configs.NewApolloRepo(ip)
 	default:
-		log.Fatal().Str("CONF_SRC", src).Msg("Unexpected environment variable:")
+		log.Fatal().Str("CONF_SRC", src).Msg("Unexpected experiment variable:")
 	}
 
 	//noinspection GoNilness

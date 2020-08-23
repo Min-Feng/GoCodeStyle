@@ -66,11 +66,7 @@ issues:
         - gomnd
         - errcheck
 
-    - path: pkg/mock
-      linters:
-        - gomnd
-
-    - path: pkg/testtool
+    - path: pkg/helper/helpertest/
       linters:
         - gomnd
 

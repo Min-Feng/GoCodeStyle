@@ -1,8 +1,7 @@
-package testtool
+package mock
 
 import (
 	"ddd/pkg/configs"
-	"ddd/pkg/repository/mysql"
 )
 
 func Config() *configs.ProjectConfig {
@@ -11,7 +10,7 @@ func Config() *configs.ProjectConfig {
 		Port:       "",
 		AlarmEmail: "",
 		LogLevel:   "",
-		MySQL: mysql.Config{
+		MySQL: configs.MySQL{
 			User:        "root",
 			Password:    "1234",
 			Host:        "127.0.0.1",

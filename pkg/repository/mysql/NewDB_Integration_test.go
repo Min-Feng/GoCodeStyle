@@ -7,12 +7,11 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"ddd/pkg/helper/helpertest/mock"
 	"ddd/pkg/repository/mysql"
-	"ddd/pkg/testtool"
 )
 
 func TestNewDB(t *testing.T) {
-	cfg := testtool.Config()
-	db := mysql.NewDB(&cfg.MySQL)
+	db := mysql.NewDB(&mock.Config().MySQL)
 	assert.NotNil(t, db)
 }

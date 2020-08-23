@@ -1,4 +1,4 @@
-package testtool
+package helpertest
 
 import (
 	"regexp"

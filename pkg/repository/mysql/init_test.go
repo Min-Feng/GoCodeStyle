@@ -1,7 +1,7 @@
 package mysql
 
-import "ddd/pkg/loghelper"
+import "ddd/pkg/helper/helperlog"
 
 func init() {
-	loghelper.UnitTestSetting()
+	helperlog.UnitTestSetting()
 }

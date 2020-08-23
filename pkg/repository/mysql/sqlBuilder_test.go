@@ -6,10 +6,11 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/adapter"
-	"ddd/pkg/mock"
+	"ddd/pkg/helper/helperlog"
+	"ddd/pkg/helper/helpertest"
+	"ddd/pkg/helper/helpertest/mock"
+	"ddd/pkg/helper/helpertype"
 	"ddd/pkg/repository/mysql"
-	"ddd/pkg/testtool"
 )
 
 func TestGenericSQLBuilder(t *testing.T) {
@@ -24,7 +25,7 @@ type GenericSQLBuilderTestSuite struct {
 func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {
 	b := ts.gSQL.IsTheRowExist("member_id", 2, "myTable")
 	actualNamedSQL := sq.DebugSqlizer(b)
-	expectedSQL := testtool.FormatToRawSQL(`
+	expectedSQL := helpertest.FormatToRawSQL(`
 		SELECT member_id 
 		FROM myTable 
 		WHERE member_id = '2' 
@@ -33,6 +34,7 @@ func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {
 }
 
 func (ts *GenericSQLBuilderTestSuite) TestTimeRange() {
+	helperlog.DevelopSetting()
 	timeFieldName := "created_time"
 
 	tests := []struct {
@@ -43,18 +45,25 @@ func (ts *GenericSQLBuilderTestSuite) TestTimeRange() {
 		expectedSQL      string
 	}{
 		{
-			name:             "Have End Time",
-			startTime:        adapter.Time{mock.NewTimeNowFunc("2020-08-19 19:43:00")()},
-			endTime:          adapter.Time{mock.NewTimeNowFunc("2020-08-21 00:00:00")()},
+			name:             "Have End StandardTime",
+			startTime:        helpertype.Time{mock.StandardTime("2020-08-19 19:43:00")},
+			endTime:          helpertype.Time{mock.StandardTime("2020-08-21 00:00:00")},
 			expectedNamedSQL: "(created_time >= '2020-08-19 19:43:00' AND created_time <= '2020-08-21 00:00:00')",
 			expectedSQL:      "(created_time >= ? AND created_time <= ?)",
 		},
 		{
-			name:             "No End Time",
-			startTime:        adapter.Time{mock.NewTimeNowFunc("2020-08-19 19:43:00")()},
+			name:             "No End StandardTime",
+			startTime:        helpertype.Time{mock.StandardTime("2020-08-19 19:43:00")},
 			endTime:          nil,
 			expectedNamedSQL: "created_time >= '2020-08-19 19:43:00'",
 			expectedSQL:      "created_time >= ?",
+		},
+		{
+			name:             "No Start StandardTime",
+			startTime:        nil,
+			endTime:          helpertype.Time{mock.StandardTime("2020-08-19 19:43:00")},
+			expectedNamedSQL: "created_time <= '2020-08-19 19:43:00'",
+			expectedSQL:      "created_time <= ?",
 		},
 	}
 

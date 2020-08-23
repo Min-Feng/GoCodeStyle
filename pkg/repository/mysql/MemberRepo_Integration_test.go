@@ -1,4 +1,4 @@
-// +build experiment
+// +build integration
 
 package mysql_test
 
@@ -7,18 +7,16 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"ddd/pkg/adapter"
 	"ddd/pkg/domain"
-	"ddd/pkg/loghelper"
-	"ddd/pkg/mock"
+	"ddd/pkg/helper/helperlog"
+	"ddd/pkg/helper/helpertest/mock"
+	"ddd/pkg/helper/helpertype"
 	"ddd/pkg/repository/mysql"
-	"ddd/pkg/testtool"
 )
 
 func TestMemberRepo_Add(t *testing.T) {
-	loghelper.DevelopSetting()
-	cfg := testtool.Config()
-	db := mysql.NewDB(&cfg.MySQL)
+	helperlog.DevelopSetting()
+	db := mysql.NewDB(&mock.Config().MySQL)
 	repo := mysql.NewMemberRepo(db)
 
 	tests := []struct {
@@ -28,13 +26,13 @@ func TestMemberRepo_Add(t *testing.T) {
 		{
 			member: &domain.Member{
 				MemberID:    "a1",
-				CreatedDate: adapter.Time{Time: mock.NewTimeNowFunc("1988-05-14")()},
+				CreatedDate: helpertype.Time{Time: mock.TimeNowFunc("1988-05-14")()},
 			},
 		},
 		// {
 		// 	member: &domain.Member{
 		// 		MemberID:    "f5",
-		// 		CreatedDate: mock.NewTimeNowFunc("2099-10-17T00:31:20")(),
+		// 		CreatedDate: mock.TimeNowFunc("2099-10-17T00:31:20")(),
 		// 	},
 		// },
 	}
@@ -49,8 +47,8 @@ func TestMemberRepo_Add(t *testing.T) {
 }
 
 func TestMemberRepo_Find(t *testing.T) {
-	loghelper.DevelopSetting()
-	cfg := testtool.Config()
+	helperlog.DevelopSetting()
+	cfg := mock.Config()
 	db := mysql.NewDB(&cfg.MySQL)
 	repo := mysql.NewMemberRepo(db)
 

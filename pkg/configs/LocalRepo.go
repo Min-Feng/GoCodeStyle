@@ -6,7 +6,7 @@ import (
 )
 
 // configPath 設置多個, 是因為二進位執行檔, 可能在 go module 根目錄執行 或 cmd 目錄執行
-func NewLocalProjectConfigRepo(configFileName string, configPaths ...string) ProjectConfigRepo {
+func NewLocalRepo(configFileName string, configPaths ...string) ProjectConfigRepo {
 	if configPaths == nil || configFileName == "" {
 		log.Fatal().Msg("Not found: configFileName is empty string or configPaths is nil slice")
 	}
@@ -25,5 +25,5 @@ func NewLocalProjectConfigRepo(configFileName string, configPaths ...string) Pro
 	}
 
 	log.Info().Msgf("New local config repository from %v successfully", vp.ConfigFileUsed())
-	return &LocalProjectConfigRepo{vp}
+	return &LocalRepo{vp}
 }

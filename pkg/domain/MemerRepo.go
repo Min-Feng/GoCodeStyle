@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"ddd/pkg/adapter"
+	"ddd/pkg/helper/helpertype"
 )
 
 type MemberRepo interface {
@@ -10,7 +10,7 @@ type MemberRepo interface {
 }
 
 type Member struct {
-	MemberID    string       `db:"member_id"`
-	CreatedDate adapter.Time `db:"created_date"`
-	SelfIntro   *string      `db:"self_intro"`
+	MemberID    string          `db:"member_id"`
+	CreatedDate helpertype.Time `db:"created_date"`
+	SelfIntro   *string         `db:"self_intro"`
 }

@@ -7,12 +7,12 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"ddd/pkg/configs"
-	"ddd/pkg/loghelper"
-	"ddd/pkg/mock"
+	"ddd/pkg/helper/helperlog"
+	"ddd/pkg/helper/helpertest/mock"
 )
 
 func init() {
-	loghelper.UnitTestSetting()
+	helperlog.UnitTestSetting()
 }
 
 func TestProjectConfigRepo(t *testing.T) {
@@ -31,27 +31,17 @@ func (ts *ProjectConfigRepoTestSuite) TestFind() {
 	}{
 		{
 			name:               "Read_Local_File_Dev",
-			repo:               configs.NewLocalProjectConfigRepo("dev", "../../config"),
+			repo:               configs.NewLocalRepo("dev", "../../config"),
 			expectedConfigName: "dev",
 		},
-		// {
-		// 	name:             "Read_Local_File_Test",
-		// 	repo:            configs.NewLocalProjectConfigRepo("test", "../../config"),
-		// 	expectedConfigName: "test",
-		// },
-		// {
-		// 	name:             "Read_Local_File_Prod",
-		// 	repo:            configs.NewLocalProjectConfigRepo("prod", "../../config"),
-		// 	expectedConfigName: "prod",
-		// },
 		{
 			name:               "Read_Mock_Repo",
 			repo:               mock.ProjectConfigRepo{},
 			expectedConfigName: "mock",
 		},
 		// {
-		// 	name:             "Read_Remote_Config",
-		// 	repo:            configs.NewApolloProjectConfigRepo(""),
+		// 	name:               "Read_Remote_Config",
+		// 	repo:               configs.NewApolloRepo(""),
 		// 	expectedConfigName: "apollo",
 		// },
 	}

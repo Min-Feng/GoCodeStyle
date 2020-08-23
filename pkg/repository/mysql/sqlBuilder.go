@@ -14,14 +14,27 @@ func (GenericSQLBuilder) IsTheRowExist(fieldName string, rowValue interface{}, t
 		Suffix("FOR UPDATE")
 }
 
-// TimeRange 呼叫端必須先確認 startTime 有值
-// 沒有'小於等於', 資料庫查詢似乎可以少一次判斷?
+// startTIme or endTime 某一方沒值, 資料庫查詢可以少一次判斷
 // https://kknews.cc/zh-tw/code/9zbqpjl.html
+//
+// startTime and endTime 可用的型別為 int family, string, Time
+//
+// squirrel 在進行 ToSql() 的時候
+// 會呼叫可用型別所擁有的 interface: driver.Value
+// 最後轉化為 ToSql() 的 args
 func (GenericSQLBuilder) TimeRange(timeFieldName string, startTime interface{}, endTime interface{}) sq.Sqlizer {
-	start := map[string]interface{}{timeFieldName: startTime}
-	if endTime != nil {
-		end := map[string]interface{}{timeFieldName: endTime}
-		return sq.And{sq.GtOrEq(start), sq.LtOrEq(end)}
+	var timeBuilder sq.Sqlizer
+	switch {
+	case startTime != nil && endTime != nil:
+		timeBuilder = sq.
+			And{
+			sq.GtOrEq{timeFieldName: startTime},
+			sq.LtOrEq{timeFieldName: endTime},
+		}
+	case startTime != nil && endTime == nil:
+		timeBuilder = sq.GtOrEq{timeFieldName: startTime}
+	case startTime == nil && endTime != nil:
+		timeBuilder = sq.LtOrEq{timeFieldName: endTime}
 	}
-	return sq.GtOrEq(start)
+	return timeBuilder
 }

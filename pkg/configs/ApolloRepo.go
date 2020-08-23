@@ -13,18 +13,22 @@ const (
 	ApolloNamespaces = "application"
 )
 
-func NewApolloProjectConfigRepo(remoteAddress string) ProjectConfigRepo {
-	remote.SetAppID(ApolloAppID)
+func NewApolloRepo(remoteAddress string) ProjectConfigRepo {
+	return newApollo(remoteAddress, ApolloAppID, ApolloCluster, ApolloNamespaces)
+}
+
+func newApollo(remoteAddress string, appID string, clusterName string, namespace string) ProjectConfigRepo {
+	remote.SetAppID(appID)
 	remote.SetConfigType("prop")
 	remote.SetAgolloOptions(
-		agollo.Cluster(ApolloCluster),
-		agollo.DefaultNamespace(ApolloNamespaces),
+		agollo.Cluster(clusterName),
+		agollo.DefaultNamespace(namespace),
 	)
 
 	vp := viper.New()
 	vp.SetConfigType("prop")
 
-	if err := vp.AddRemoteProvider("apollo", remoteAddress, ApolloNamespaces); err != nil {
+	if err := vp.AddRemoteProvider("apollo", remoteAddress, namespace); err != nil {
 		log.Fatal().
 			Err(err).
 			Str("ApolloRemoteAddress", remoteAddress).
@@ -36,5 +40,5 @@ func NewApolloProjectConfigRepo(remoteAddress string) ProjectConfigRepo {
 	}
 
 	log.Info().Msg("New remote config repository from apollo successfully")
-	return &ApolloProjectConfigRepo{vp}
+	return &ApolloRepo{vp}
 }
