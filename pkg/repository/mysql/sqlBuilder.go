@@ -18,10 +18,6 @@ func (GenericSQLBuilder) IsTheRowExist(fieldName string, rowValue interface{}, t
 // https://kknews.cc/zh-tw/code/9zbqpjl.html
 //
 // startTime and endTime 可用的型別為 int family, string, Time
-//
-// squirrel 在進行 ToSql() 的時候
-// 會呼叫可用型別所擁有的 interface: driver.Value
-// 最後轉化為 ToSql() 的 args
 func (GenericSQLBuilder) TimeRange(timeFieldName string, startTime interface{}, endTime interface{}) sq.Sqlizer {
 	var timeBuilder sq.Sqlizer
 	switch {

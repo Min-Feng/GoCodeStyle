@@ -40,7 +40,7 @@ type Time struct {
  所以使用了 value receiver 來實現 interface: sql.Valuer
 
  若使用 pointer receiver 來實現 interface
- 那麼資料型別就必須使用 value 才可以滿足 interface 的規則
+ 那麼資料型別就必須使用 pointer 才可以滿足 interface 的規則
  因為 value instance 無法得知 pointer receiver 所擁有的方法集合
  https://golang.org/ref/spec#Method_sets
 */
@@ -49,6 +49,17 @@ func (t Time) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return t.sqlDatetime(), nil
+}
+
+// squirrel 使用 sq.Eq{} 進行 ToSql() 的時候
+// 會使用型別所實現的 interface: driver.Value
+//
+// 但若使用 squirrel Insert Value 進行 ToSql() 的時候
+// 則是使用型別所實現的 interface: fmt.Stringer
+//
+// 最後都轉化為 ToSql() 的 args
+func (t Time) String() string {
+	return t.Format(TimeLayoutSQLDatetime)
 }
 
 // sqlDatetime 主要用在 sql where 的地方, 且該欄位在資料庫為 datetime 型別
