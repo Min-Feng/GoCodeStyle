@@ -19,18 +19,16 @@ func (GenericSQLBuilder) IsTheRowExist(fieldName string, rowValue interface{}, t
 //
 // startTime and endTime 可用的型別為 int family, string, Time
 func (GenericSQLBuilder) TimeRange(timeFieldName string, startTime interface{}, endTime interface{}) sq.Sqlizer {
-	var timeBuilder sq.Sqlizer
 	switch {
 	case startTime != nil && endTime != nil:
-		timeBuilder = sq.
-			And{
+		return sq.And{
 			sq.GtOrEq{timeFieldName: startTime},
 			sq.LtOrEq{timeFieldName: endTime},
 		}
 	case startTime != nil && endTime == nil:
-		timeBuilder = sq.GtOrEq{timeFieldName: startTime}
+		return sq.GtOrEq{timeFieldName: startTime}
 	case startTime == nil && endTime != nil:
-		timeBuilder = sq.LtOrEq{timeFieldName: endTime}
+		return sq.LtOrEq{timeFieldName: endTime}
 	}
-	return timeBuilder
+	return nil
 }

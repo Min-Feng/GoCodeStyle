@@ -11,7 +11,7 @@ import (
 func NewDB(cfg *configs.MySQL) *sqlx.DB {
 	db, err := sqlx.Connect("mysql", cfg.DSN())
 	if err != nil {
-		log.Fatal().Err(err).Msg("Connect mysql db failed:")
+		log.Error().Err(err).Msg("Connect mysql db failed:")
 		return nil
 	}
 

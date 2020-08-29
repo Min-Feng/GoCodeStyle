@@ -36,6 +36,8 @@ func Init(logLevel Level, wKind WriterKind) {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	case ErrorLevel:
 		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	case Disabled:
+		zerolog.SetGlobalLevel(zerolog.Disabled)
 	default:
 		panic("Init log package failed: invalid log level")
 	}
