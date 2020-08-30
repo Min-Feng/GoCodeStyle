@@ -57,6 +57,9 @@ func (t Time) Value() (driver.Value, error) {
 // 但若使用 squirrel Insert Value 進行 ToSql() 的時候
 // 則是使用型別所實現的 interface: fmt.Stringer
 //
+// 後來發現, 似乎只有 sq.DebugSqlizer 才會轉為 fmt.Stringer
+// https://github.com/Masterminds/squirrel/issues/260
+//
 // 最後都轉化為 ToSql() 的 args
 func (t Time) String() string {
 	return t.Format(TimeLayoutSQLDatetime)

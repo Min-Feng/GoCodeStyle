@@ -38,11 +38,11 @@ func TestExperiment(t *testing.T) {
 
 	spew.Dump(data)
 
-	b1 := sq.Select("*").From("test").Where(sq.Eq{"created_time": mock.CustomizedTime("2020-12-22")})
+	b1 := sq.Select("*").From("test").Where(sq.Eq{"created_time": mock.Time("2020-12-22")})
 	sql1 := sq.DebugSqlizer(b1)
 	assert.Equal(t, "", sql1)
 
-	b2 := sq.Insert("test").Columns("created_time").Values(mock.CustomizedTime("2020-12-22"))
+	b2 := sq.Insert("test").Columns("created_time").Values(mock.Time("2020-12-22"))
 	sql2 := sq.DebugSqlizer(b2)
 	assert.Equal(t, "", sql2)
 }

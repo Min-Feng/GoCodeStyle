@@ -11,7 +11,7 @@ import (
 type FieldName = string
 
 func StructFilterZeroValueField(raw interface{}, tagKey string) map[FieldName]interface{} {
-	if !isStructType(raw, tagKey) {
+	if !isStructType(raw) {
 		log.Fatal().Msg("is not struct type")
 	}
 
@@ -36,13 +36,13 @@ func StructFilterZeroValueField(raw interface{}, tagKey string) map[FieldName]in
 	return values
 }
 
-func isStructType(raw interface{}, tagKey string) bool {
+func isStructType(raw interface{}) bool {
 	v := reflect.ValueOf(raw)
 	switch v.Kind() {
 	case reflect.Struct:
 		return true
 	case reflect.Ptr:
-		return isStructType(v.Elem().Interface(), tagKey)
+		return isStructType(v.Elem().Interface())
 	}
 	return false
 }

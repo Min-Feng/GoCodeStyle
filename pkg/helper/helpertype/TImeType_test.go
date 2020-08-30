@@ -68,7 +68,7 @@ func (ts *TimeTestSuite) TestMarshalJSON() {
 	}{
 		{
 			name:         "Normal Time",
-			payload:      Payload{mock.CustomizedTime("2020-08-16 23:22:55")},
+			payload:      Payload{mock.Time("2020-08-16 23:22:55")},
 			expectedJSON: `{"datetime":"2020-08-16 23:22:55"}`,
 		},
 		{

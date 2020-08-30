@@ -33,11 +33,11 @@ func TestStructFilterZeroValueField(t *testing.T) {
 		},
 		{
 			rawStruct: QueryCondition{
-				CreatedTime: mock.CustomizedTime("2020-08-23"),
+				CreatedTime: mock.Time("2020-08-23"),
 				UserName:    "caesar",
 			},
 			expectedMap: map[helpertype.FieldName]interface{}{
-				"created_time": mock.CustomizedTime("2020-08-23"),
+				"created_time": mock.Time("2020-08-23"),
 				"user_name":    "caesar",
 			},
 		},

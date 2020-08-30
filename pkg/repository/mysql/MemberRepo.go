@@ -12,7 +12,7 @@ import (
 	"ddd/pkg/domain"
 )
 
-const MemberTableName = "member"
+const TableNameMember = "member"
 
 func NewMemberRepo(db *sqlx.DB) *MemberRepo {
 	return &MemberRepo{db: db}
@@ -61,14 +61,14 @@ type MemberRepoSQLBuilder struct{}
 func (MemberRepoSQLBuilder) Find(memberID string) sq.Sqlizer {
 	return sq.
 		Select("*").
-		From(MemberTableName).
+		From(TableNameMember).
 		Where(sq.Eq{"member_id": memberID}).
 		OrderBy("created_date DESC")
 }
 
 func (MemberRepoSQLBuilder) Add(m *domain.Member) sq.Sqlizer {
 	return sq.
-		Insert(MemberTableName).
+		Insert(TableNameMember).
 		Columns("member_id", "created_date", "self_intro").
 		Values(m.MemberID, m.CreatedDate, m.SelfIntro)
 }
