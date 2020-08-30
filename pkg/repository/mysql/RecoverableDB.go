@@ -13,8 +13,9 @@ import (
 
 func NewRecoverableDB(newDB func() *sqlx.DB) *RecoverableDB {
 	return &RecoverableDB{
-		DB:    newDB(),
-		newDB: newDB,
+		DB:       newDB(),
+		newDB:    newDB,
+		logTitle: "Failover",
 	}
 }
 
@@ -39,7 +40,8 @@ type RecoverableDB struct {
 	*sqlx.DB
 	newDB         func() *sqlx.DB
 	failover      singleflight.Group
-	failoverTimes int
+	failoverCount int
+	logTitle      string
 }
 
 func (reDB *RecoverableDB) forUnitTest() (Err error) {
@@ -82,36 +84,42 @@ func (reDB *RecoverableDB) failoverAction(failoverReason string, action func()) 
 	// 瞬間大量請求的情境, share 為 true
 	// 循序請求的情境, share 為 false
 	_, _, shared := reDB.failover.Do(failoverReason, func() (interface{}, error) {
-		log.Info().Str("Failover", failoverReason).Send()
-		reDB.failoverTimes++
+		reDB.failoverCount++
+		log.Info().Str(reDB.countTitle(), fmt.Sprintf("reason: %v", failoverReason)).Msg(reDB.logTitle)
 		action()
 		return nil, nil
 	})
 	if log.Debug().Enabled() {
-		log.Debug().Bool("share", shared).Send()
+		log.Debug().Bool("IsShareData", shared).Msg(reDB.logTitle)
 	}
 }
 
 func (reDB *RecoverableDB) retryInit() {
-	log.Info().Str("Failover", fmt.Sprintf("%vth action start: retry to init db", reDB.failoverTimes)).Send()
+	subTitle := reDB.countTitle()
+	log.Info().Str(subTitle, "start retry to init db").Msg(reDB.logTitle)
 
 	reDB.DB = reDB.newDB()
 	if reDB.DB == nil {
-		log.Error().Str("Failover", fmt.Sprintf("%vth action end: init mysql db failed", reDB.failoverTimes)).Send()
+		log.Error().Str(subTitle, "end retry to init db failed").Msg(reDB.logTitle)
 		return
 	}
-	log.Info().Str("Failover", fmt.Sprintf("%vth action end: init mysql db successfully", reDB.failoverTimes)).Send()
+	log.Info().Str(subTitle, "end retry to init db successfully").Msg(reDB.logTitle)
 }
 
 func (reDB *RecoverableDB) close() {
 	if reDB.DB == nil {
 		return
 	}
-	log.Info().Str("Failover", fmt.Sprintf("%vth action start: close db", reDB.failoverTimes)).Send()
+	subTitle := reDB.countTitle()
+	log.Info().Str(subTitle, "start close db").Msg(reDB.logTitle)
 
 	if err := reDB.DB.Close(); err != nil {
-		log.Error().Err(err).Str("Failover", fmt.Sprintf("%vth action end: close db", reDB.failoverTimes)).Send()
+		log.Error().Str(subTitle, "end close db failed").Msg(reDB.logTitle)
 		return
 	}
-	log.Info().Str("Failover", fmt.Sprintf("%vth action end: close db successfully", reDB.failoverTimes)).Send()
+	log.Info().Str(subTitle, "end close db successfully").Msg(reDB.logTitle)
+}
+
+func (reDB *RecoverableDB) countTitle() string {
+	return fmt.Sprintf("the_%v_action", reDB.failoverCount)
 }

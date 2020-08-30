@@ -17,6 +17,7 @@ import (
 
 func TestNewRecoverableDB_SyncRequest(t *testing.T) {
 	// helperlog.Init(helperlog.Disabled, helperlog.WriterKindHuman)
+	// helperlog.Init(helperlog.DebugLevel, helperlog.WriterKindJSON)
 	helperlog.DevelopSetting()
 
 	// 不包含初始化的那次
