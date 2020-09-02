@@ -10,6 +10,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+//nolint:gochecknoglobals
+var ModuleDirectory = []string{"GoCodeStyle/"}
+
 // UnitTestSetting 提供 _test.go 使用, 避免執行命令 go test 輸出時, 有多餘 log 訊息
 func UnitTestSetting() {
 	Init(ErrorLevel, WriterKindHuman)
@@ -55,7 +58,7 @@ func newConsoleWriter() io.Writer {
 		NoColor:      true,
 		TimeFormat:   "2006-01-02 15:04:05Z07:00",
 		FormatLevel:  func(i interface{}) string { return strings.ToUpper(fmt.Sprintf("[%v]", i)) },
-		FormatCaller: longFileFormatCaller("GoCodeStyle/"),
+		FormatCaller: longFileFormatCaller(ModuleDirectory...),
 	}
 	return writer
 }

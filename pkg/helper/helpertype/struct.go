@@ -10,14 +10,16 @@ import (
 
 type FieldName = string
 
-func StructFilterZeroValueField(raw interface{}, tagKey string) map[FieldName]interface{} {
+type StructTool struct{}
+
+func (StructTool) FilterZeroValueField(raw interface{}, tagKey string) map[FieldName]interface{} {
 	if !isStructType(raw) {
 		log.Fatal().Msg("is not struct type")
 	}
 
 	v := reflect.ValueOf(raw)
 	if v.IsZero() {
-		return nil
+		return map[string]interface{}{}
 	}
 
 	var values map[string]interface{}
@@ -27,7 +29,13 @@ func StructFilterZeroValueField(raw interface{}, tagKey string) map[FieldName]in
 	case reflect.Struct:
 		values, err = filter(raw, tagKey)
 	case reflect.Ptr:
-		values, err = filter(v.Elem().Interface(), tagKey)
+		var originValue interface{}
+		if v.IsNil() {
+			originValue = reflect.Indirect(v)
+		} else {
+			originValue = v.Elem().Interface()
+		}
+		values, err = filter(originValue, tagKey)
 	}
 
 	if err != nil {
@@ -42,7 +50,15 @@ func isStructType(raw interface{}) bool {
 	case reflect.Struct:
 		return true
 	case reflect.Ptr:
-		return isStructType(v.Elem().Interface())
+		var originValue interface{}
+
+		if v.IsNil() {
+			originValue = reflect.Indirect(v)
+		} else {
+			originValue = v.Elem().Interface()
+		}
+
+		return isStructType(originValue)
 	}
 	return false
 }
@@ -55,7 +71,17 @@ func filter(raw interface{}, tagKey string) (map[FieldName]interface{}, error) {
 
 	for i := 0; i < fieldNum; i++ {
 		fieldValue := structValue.Field(i)
+
+		if log.Debug().Enabled() {
+			fieldType := structType.Field(i)
+			log.Debug().
+				Str("FieldName", fieldType.Name).
+				Bool("IsZero", fieldValue.IsZero()).
+				Msg(structType.Name())
+		}
+
 		if fieldValue.IsZero() { // filter condition
+			fieldValue.IsValid()
 			continue
 		}
 

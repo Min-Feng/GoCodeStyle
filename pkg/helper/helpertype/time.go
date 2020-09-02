@@ -15,9 +15,11 @@ var timeSpec = []string{
 	// "15:04",
 }
 
+type TimeTool struct{}
+
 // timeLayout 格式 只有0時區用 Z
 // 其他時區要用 +-, 例如 2055-04-01 22:13:47-01:00
-func TimeParse(timeLayout string) (t time.Time, err error) {
+func (TimeTool) Parse(timeLayout string) (t time.Time, err error) {
 	for _, spec := range timeSpec {
 		t, err = time.ParseInLocation(spec, timeLayout, time.Local)
 		if err == nil {

@@ -21,7 +21,7 @@ func Time(fakeTime string) helpertype.Time {
 // 提供 fake 時間 Now 函數
 func TimeNowFunc(fakeTime string) func() time.Time {
 	return func() time.Time {
-		t, err := helpertype.TimeParse(fakeTime)
+		t, err := helpertype.TimeTool{}.Parse(fakeTime)
 		if err != nil {
 			log.Fatal().Msgf("New fakeTimeNow function failed: %v\n%+[1]v", err)
 		}

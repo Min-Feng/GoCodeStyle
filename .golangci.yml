@@ -70,9 +70,20 @@ issues:
       linters:
         - gomnd
 
+    #    - path: pkg/helper/helpertype/
+    #      linters:
+    #        - golint
+    #        - stylecheck
+    #      text: "use underscores in Go names"
+
     - linters:
         - golint
       text: "a blank import"
+
+    - linters:
+        - golint
+        - stylecheck
+      text: "comment on exported var"
 
     - linters:
         - golint

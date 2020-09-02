@@ -11,6 +11,7 @@ require (
 	github.com/mitchellh/mapstructure v1.3.2
 	github.com/morikuni/failure v0.13.0
 	github.com/rs/zerolog v1.19.0
+	github.com/segmentio/kafka-go v0.4.2
 	github.com/shima-park/agollo v1.2.6
 	github.com/spf13/viper v1.7.0
 	github.com/stretchr/testify v1.6.1

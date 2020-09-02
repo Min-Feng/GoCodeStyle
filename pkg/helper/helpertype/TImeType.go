@@ -62,7 +62,7 @@ func (t Time) Value() (driver.Value, error) {
 //
 // 最後都轉化為 ToSql() 的 args
 func (t Time) String() string {
-	return t.Format(TimeLayoutSQLDatetime)
+	return t.sqlDatetime()
 }
 
 // sqlDatetime 主要用在 sql where 的地方, 且該欄位在資料庫為 datetime 型別
@@ -119,7 +119,7 @@ func (t *Time) UnmarshalJSON(data []byte) (err error) {
 		return nil
 	}
 
-	t.Time, err = TimeParse(timeString)
+	t.Time, err = TimeTool{}.Parse(timeString)
 	if err != nil {
 		return failure.Wrap(err, failure.Message("helpertype.Time UnmarshalJSON"))
 	}
