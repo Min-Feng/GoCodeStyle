@@ -60,6 +60,7 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 		{
 			name: "field have value but is js null",
 			rawStruct: &QueryCondition{
+				Age:           (*int)(nil),
 				NullableValue: (*float64)(nil), // note!! reflect.ValueOf(field).IsZero=false
 			},
 			expectedMap: map[string]interface{}{

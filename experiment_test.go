@@ -3,18 +3,15 @@
 package experiment
 
 import (
-	"fmt"
+	"encoding/json"
 	"testing"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/stretchr/testify/assert"
 
 	"ddd/pkg/domain"
 	"ddd/pkg/helper/helperlog"
-	"ddd/pkg/helper/helpertest/mock"
 	"ddd/pkg/helper/helpertype"
-	"ddd/pkg/repository/mysql"
 )
 
 func init() {
@@ -23,28 +20,15 @@ func init() {
 
 // 實驗區 測試想法
 func TestExperiment(t *testing.T) {
-	var err error
+	b := []byte(`{
+  "age": 12.2,
+  "money": null
+}`)
 
-	config := mock.Config()
-	db := mysql.NewDB(&config.MySQL)
+	m := make(map[string]interface{})
+	json.Unmarshal(b, &m)
 
-	sqlString, args, err := JoinSQL().ToSql()
-	assert.NoError(t, err)
-	fmt.Println(sqlString)
-
-	data := new(Row)
-	err = db.Get(data, sqlString, args...)
-	assert.NoError(t, err)
-
-	spew.Dump(data)
-
-	b1 := sq.Select("*").From("test").Where(sq.Eq{"created_time": mock.Time("2020-12-22")})
-	sql1 := sq.DebugSqlizer(b1)
-	assert.Equal(t, "", sql1)
-
-	b2 := sq.Insert("test").Columns("created_time").Values(mock.Time("2020-12-22"))
-	sql2 := sq.DebugSqlizer(b2)
-	assert.Equal(t, "", sql2)
+	spew.Dump(m)
 }
 
 // type Row struct
