@@ -4,10 +4,11 @@ type Level = string
 
 //noinspection GoUnusedConst
 const (
+	TraceLevel Level = "trace"
 	DebugLevel Level = "debug"
 	InfoLevel  Level = "info"
-	ErrorLevel Level = "error"    // for unit test
-	Disabled   Level = "disabled" // for unit test
+	ErrorLevel Level = "error"
+	Disabled   Level = "disabled"
 )
 
 type WriterKind = string

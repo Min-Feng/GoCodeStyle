@@ -15,20 +15,29 @@ var ModuleDirectory = []string{"GoCodeStyle/"}
 
 // UnitTestSetting 提供 _test.go 使用, 避免執行命令 go test 輸出時, 有多餘 log 訊息
 func UnitTestSetting() {
-	Init(ErrorLevel, WriterKindHuman)
+	SetGlobal(ErrorLevel, WriterKindHuman)
 }
 
 // DevelopSetting 開發期間, 進行單元測試, 查看 log 格式是否符合預期
 //
 //noinspection GoUnusedExportedFunction
 func DevelopSetting() {
-	Init(DebugLevel, WriterKindHuman)
+	SetGlobal(DebugLevel, WriterKindHuman)
 }
 
-// Init can set global logLevel = ["debug", "info", "error"]
+// Init can SetGlobal global logLevel = ["debug", "info", "error"]
 // wKind = ["json", "human"]
 func Init(logLevel Level, wKind WriterKind) {
+	SetGlobal(logLevel, wKind)
+}
+
+func SetGlobal(logLevel Level, wKind WriterKind) {
+	canLevel := true
+	canKind := true
+
 	switch logLevel {
+	case TraceLevel:
+		zerolog.SetGlobalLevel(zerolog.TraceLevel)
 	case DebugLevel:
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	case InfoLevel:
@@ -38,7 +47,8 @@ func Init(logLevel Level, wKind WriterKind) {
 	case Disabled:
 		zerolog.SetGlobalLevel(zerolog.Disabled)
 	default:
-		panic("Init log package failed: invalid log level")
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+		canLevel = false
 	}
 
 	switch wKind {
@@ -48,7 +58,21 @@ func Init(logLevel Level, wKind WriterKind) {
 	case WriterKindJSON:
 		log.Logger = log.Output(os.Stdout)
 	default:
-		panic("Init log package failed: invalid writer kind")
+		writer := newConsoleWriter()
+		log.Logger = log.Output(writer).With().Caller().Logger()
+		canKind = false
+	}
+
+	switch canLevel && canKind {
+	case false:
+		errEvent := log.Error()
+		if !canLevel {
+			errEvent.Str("Level", logLevel)
+		}
+		if !canKind {
+			errEvent.Str("WriterKind", wKind)
+		}
+		errEvent.Msg("log set global setting not support")
 	}
 }
 

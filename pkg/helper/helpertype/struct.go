@@ -72,9 +72,9 @@ func filter(raw interface{}, tagKey string) (map[FieldName]interface{}, error) {
 	for i := 0; i < fieldNum; i++ {
 		fieldValue := structValue.Field(i)
 
-		if log.Debug().Enabled() {
+		if log.Trace().Enabled() {
 			fieldType := structType.Field(i)
-			log.Debug().
+			log.Trace().
 				Str("FieldName", fieldType.Name).
 				Bool("IsZero", fieldValue.IsZero()).
 				Msg(structType.Name())

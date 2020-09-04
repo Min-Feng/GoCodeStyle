@@ -6,6 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
+	"ddd/pkg/api"
 	"ddd/pkg/configs"
 	"ddd/pkg/helper/helperlog"
 	"ddd/pkg/repository/mysql"
@@ -31,6 +32,14 @@ func main() {
 	helperlog.Init(cfg.LogLevel, helperlog.WriterKindHuman)
 
 	mysql.NewDB(&cfg.MySQL)
+
+	debugHandler := &api.DebugHandler{}
+	router := api.NewRouter(cfg.LogLevel)
+	router.PUT("debug/logLevel", debugHandler.UpdateLogLevel)
+
+	if err := router.Run(":" + cfg.Port); err != nil {
+
+	}
 }
 
 func NewConfig(src string) *configs.ProjectConfig {
@@ -49,5 +58,7 @@ func NewConfig(src string) *configs.ProjectConfig {
 	}
 
 	//noinspection GoNilness
-	return repo.Find()
+	cfg := repo.Find()
+	log.Info().Msg("New Project Config successfully")
+	return cfg
 }

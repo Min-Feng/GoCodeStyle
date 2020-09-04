@@ -22,6 +22,5 @@ func (repo *projectConfigRepo) Find() *ProjectConfig {
 		return nil
 	}
 
-	log.Info().Msg("configs.ProjectConfigRepo Find config successfully")
 	return cfg
 }

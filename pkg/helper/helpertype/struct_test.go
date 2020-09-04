@@ -7,12 +7,13 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 
+	"ddd/pkg/helper/helperlog"
 	"ddd/pkg/helper/helpertest/mock"
 	"ddd/pkg/helper/helpertype"
 )
 
 func TestStructTool_FilterZeroValueField(t *testing.T) {
-	// helperlog.DevelopSetting()
+	helperlog.DevelopSetting()
 
 	type QueryCondition struct {
 		CreatedTime   helpertype.Time `db:"created_time"`
