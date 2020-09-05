@@ -18,7 +18,7 @@ import (
 func TestNewRecoverableDB_SyncRequest(t *testing.T) {
 	// helperlog.Init(helperlog.Disabled, helperlog.WriterKindHuman)
 	// helperlog.Init(helperlog.DebugLevel, helperlog.WriterKindJSON)
-	helperlog.DevelopSetting()
+	helperlog.DeveloperMode()
 
 	// 不包含初始化的那次
 	// 後續進行 retry init, 會產生 x= 7次 nil DB
@@ -31,7 +31,7 @@ func TestNewRecoverableDB_SyncRequest(t *testing.T) {
 			count++
 			return nil
 		}
-		return NewDB(&mock.Config().MySQL)
+		return NewDB(&mock.Config.MySQL)
 	})
 
 	for i := 1; i <= 50; i++ {
@@ -53,7 +53,7 @@ func TestNewRecoverableDB_SyncRequest(t *testing.T) {
 
 func TestNewRecoverableDB_AsyncRequest(t *testing.T) {
 	// helperlog.Init(helperlog.Disabled, helperlog.WriterKindHuman)
-	helperlog.DevelopSetting()
+	helperlog.DeveloperMode()
 
 	maxNilCount := 7
 	var count int
@@ -62,7 +62,7 @@ func TestNewRecoverableDB_AsyncRequest(t *testing.T) {
 			count++
 			return nil
 		}
-		return NewDB(&mock.Config().MySQL)
+		return NewDB(&mock.Config.MySQL)
 	})
 
 	// 模擬三波瞬間大量請求

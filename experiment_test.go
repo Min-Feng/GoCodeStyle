@@ -15,7 +15,7 @@ import (
 )
 
 func init() {
-	helperlog.DevelopSetting()
+	helperlog.DeveloperMode()
 }
 
 // 實驗區 測試想法

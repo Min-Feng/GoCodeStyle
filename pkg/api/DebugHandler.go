@@ -1,7 +1,8 @@
 package api
 
 import (
-	"github.com/davecgh/go-spew/spew"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/morikuni/failure"
 	"github.com/rs/zerolog/log"
@@ -19,19 +20,25 @@ func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 
 	payload := new(Payload)
 	if err := c.ShouldBindJSON(payload); err != nil {
-		c.Set("Error", failure.Translate(err, domain.ErrValidate))
-		c.Next()
+		Err := failure.Translate(err, domain.ErrValidate)
+		c.Set("Error", Err)
+		log.Error().Msgf("%v", Err)
 		return
 	}
+	// log.Info().Msgf("payload=%#v", spew.NewFormatter(payload))
 
-	log.Info().Msgf("payload=%#v", spew.NewFormatter(payload))
-	helperlog.SetGlobal(payload.LogLevel, helperlog.WriterKindHuman)
+	err := helperlog.SetGlobal(payload.LogLevel, helperlog.WriterKindHuman)
+	if err != nil {
+		Err := failure.Wrap(err)
+		c.Set("Error", Err)
+		log.Error().Msgf("%v", Err)
+		if log.Debug().Enabled() {
+			log.Error().Msgf("\n%+v", Err)
+		}
+		return
+	}
+	log.Info().Str("logLevel", payload.LogLevel).Msg("Set loglevel successfully")
 
-	log.Trace().Msg("trace")
-	log.Debug().Msg("debug")
-	log.Info().Msg("info")
-	log.Error().Msg("error")
-
-	// 已經執行 return response, 就不要在後續的 middleware 再次對 response 進行操作
-	// c.JSON(http.StatusOK, normalResponse)
+	// 已經執行 return response, 後續的 middleware 就不要再次對 response 進行操作
+	c.JSON(http.StatusOK, normalResponse)
 }

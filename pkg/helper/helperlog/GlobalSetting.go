@@ -6,34 +6,33 @@ import (
 	"os"
 	"strings"
 
+	"github.com/morikuni/failure"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+
+	"ddd/pkg/domain"
 )
 
-//nolint:gochecknoglobals
-var ModuleDirectory = []string{"GoCodeStyle/"}
-
-// UnitTestSetting 提供 _test.go 使用, 避免執行命令 go test 輸出時, 有多餘 log 訊息
-func UnitTestSetting() {
+// UnitTestMode 提供 _test.go 使用, 避免執行命令 go test 輸出時, 有多餘 log 訊息
+func UnitTestMode() {
 	SetGlobal(ErrorLevel, WriterKindHuman)
 }
 
-// DevelopSetting 開發期間, 進行單元測試, 查看 log 格式是否符合預期
+// DeveloperMode 開發期間, 進行單元測試, 查看 log 格式是否符合預期
 //
 //noinspection GoUnusedExportedFunction
-func DevelopSetting() {
+func DeveloperMode() {
 	SetGlobal(DebugLevel, WriterKindHuman)
 }
 
-// Init can SetGlobal global logLevel = ["debug", "info", "error"]
-// wKind = ["json", "human"]
-func Init(logLevel Level, wKind WriterKind) {
-	SetGlobal(logLevel, wKind)
+//noinspection GoUnusedExportedFunction
+func FixBugMode() {
+	SetGlobal(TraceLevel, WriterKindHuman)
 }
 
-func SetGlobal(logLevel Level, wKind WriterKind) {
-	canLevel := true
-	canKind := true
+func SetGlobal(logLevel Level, wKind WriterKind) error {
+	canSetLevel := true
+	canSetKind := true
 
 	switch logLevel {
 	case TraceLevel:
@@ -48,7 +47,7 @@ func SetGlobal(logLevel Level, wKind WriterKind) {
 		zerolog.SetGlobalLevel(zerolog.Disabled)
 	default:
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
-		canLevel = false
+		canSetLevel = false
 	}
 
 	switch wKind {
@@ -60,20 +59,25 @@ func SetGlobal(logLevel Level, wKind WriterKind) {
 	default:
 		writer := newConsoleWriter()
 		log.Logger = log.Output(writer).With().Caller().Logger()
-		canKind = false
+		canSetKind = false
 	}
 
-	switch canLevel && canKind {
-	case false:
-		errEvent := log.Error()
-		if !canLevel {
-			errEvent.Str("Level", logLevel)
+	if !canSetLevel || !canSetKind {
+		var msg []failure.Wrapper
+		msg = append(msg, failure.Message("because logger global setting not support"))
+
+		if !canSetLevel {
+			msg = append(msg, failure.Context{"Level": logLevel})
 		}
-		if !canKind {
-			errEvent.Str("WriterKind", wKind)
+		if !canSetKind {
+			msg = append(msg, failure.Context{"WriterKind": wKind})
 		}
-		errEvent.Msg("log set global setting not support")
+
+		msg = append(msg, failure.Message("so reset level to InfoLevel"))
+		return failure.New(domain.ErrValidate, msg...)
 	}
+
+	return nil
 }
 
 func newConsoleWriter() io.Writer {

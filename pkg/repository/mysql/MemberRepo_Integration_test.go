@@ -15,8 +15,8 @@ import (
 )
 
 func TestMemberRepo_Add(t *testing.T) {
-	helperlog.DevelopSetting()
-	db := mysql.NewDB(&mock.Config().MySQL)
+	helperlog.DeveloperMode()
+	db := mysql.NewDB(&mock.Config.MySQL)
 	repo := mysql.NewMemberRepo(db)
 
 	tests := []struct {
@@ -47,8 +47,8 @@ func TestMemberRepo_Add(t *testing.T) {
 }
 
 func TestMemberRepo_Find(t *testing.T) {
-	helperlog.DevelopSetting()
-	cfg := mock.Config()
+	helperlog.DeveloperMode()
+	cfg := mock.Config
 	db := mysql.NewDB(&cfg.MySQL)
 	repo := mysql.NewMemberRepo(db)
 

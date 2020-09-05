@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	helperlog.UnitTestSetting()
+	helperlog.UnitTestMode()
 }
 
 func TestProjectConfigRepo(t *testing.T) {
@@ -31,7 +31,7 @@ func (ts *ProjectConfigRepoTestSuite) TestFind() {
 	}{
 		{
 			name:               "Read_Local_File_Dev",
-			repo:               configs.NewLocalRepo("dev", "../../config"),
+			repo:               configs.NewLocalRepo("dev"),
 			expectedConfigName: "dev",
 		},
 		{

@@ -3,12 +3,22 @@ package api
 import (
 	"net/http"
 
-	"github.com/morikuni/failure"
-
 	"ddd/pkg/domain"
 )
 
-const ErrUndefined failure.StringCode = "Undefined Error"
+// Response
+
+var normalResponse = necessaryResponse{
+	CustomizedCode: 0,
+	Message:        "ok",
+}
+
+type necessaryResponse struct {
+	CustomizedCode int    `json:"code"`
+	Message        string `json:"message"`
+}
+
+// Code
 
 type ResponseCode struct {
 	HTTPCode       int

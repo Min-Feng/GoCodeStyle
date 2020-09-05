@@ -34,7 +34,7 @@ func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {
 }
 
 func (ts *GenericSQLBuilderTestSuite) TestTimeRange() {
-	helperlog.DevelopSetting()
+	helperlog.DeveloperMode()
 	timeFieldName := "created_time"
 
 	tests := []struct {

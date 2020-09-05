@@ -20,8 +20,8 @@ import (
 // 由於還沒讀取到 config 的設定
 // 不知道 log level, 所以先使用一個預設等級
 func init() {
-	DefaultLevel := helperlog.InfoLevel
-	helperlog.Init(DefaultLevel, helperlog.WriterKindHuman)
+	helperlog.Init()
+	configs.Init()
 }
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 
 	configSRC := strings.ToLower(os.Getenv("CONF_SRC"))
 	cfg := NewConfig(configSRC)
-	helperlog.Init(cfg.LogLevel, helperlog.WriterKindHuman)
+	helperlog.SetGlobal(cfg.LogLevel, helperlog.WriterKindHuman)
 
 	mysql.NewDB(&cfg.MySQL)
 
@@ -48,13 +48,12 @@ func NewConfig(src string) *configs.ProjectConfig {
 	switch src {
 	case "local":
 		fileName := os.Getenv("FILE_NAME")
-		// 因為不確定 開發者會在什麼地方執行 go run, 專案根目錄 或 cmd 目錄
-		repo = configs.NewLocalRepo(fileName, "./config", "../config")
+		repo = configs.NewLocalRepo(fileName)
 	case "apollo":
 		ip := os.Getenv("APOLLO_ADDRESS")
 		repo = configs.NewApolloRepo(ip)
 	default:
-		log.Fatal().Str("CONF_SRC", src).Msg("Unexpected experiment variable:")
+		log.Fatal().Str("CONF_SRC", src).Msg("Unexpected environment variable:")
 	}
 
 	//noinspection GoNilness

@@ -6,6 +6,15 @@ import (
 	"ddd/pkg/helper/helperlog"
 )
 
+type Server struct {
+	address string
+	engine  *gin.Engine
+}
+
+func (s *Server) Start() error {
+	return s.engine.Run(s.address)
+}
+
 func NewRouter(logLevel helperlog.Level) *gin.Engine {
 	switch logLevel {
 	case helperlog.TraceLevel, helperlog.DebugLevel:
@@ -17,8 +26,8 @@ func NewRouter(logLevel helperlog.Level) *gin.Engine {
 
 	router := gin.New()
 
-	// 初始化順序, 右到左
-	// 執行順序, 左到右, 也就是說 gin.Logger() 最後執行
+	// c.Next() 之前, 初始化順序, 右到左
+	// c.Next() 之後, 執行順序, 左到右, 也就是說 gin.Logger() 最後執行
 	router.Use(gin.Logger(), gin.Recovery(), ErrorResponseMiddleware)
 
 	return router
