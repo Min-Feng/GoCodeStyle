@@ -17,7 +17,6 @@ func ErrorResponseMiddleware(c *gin.Context) {
 
 	Err := err.(error)
 	checkoutResponse(c, Err)
-	c.Abort()
 }
 
 func checkoutResponse(c *gin.Context, err error) {
