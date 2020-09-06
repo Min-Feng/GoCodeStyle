@@ -41,4 +41,5 @@ func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 
 	// 已經執行 return response, 後續的 middleware 就不要再次對 response 進行操作
 	c.JSON(http.StatusOK, normalResponse)
+	c.Abort()
 }
