@@ -22,7 +22,7 @@ linters-settings:
     ignore: fmt:.*,io/ioutil:^Read.*
 
 linters:
-  fast: false
+  fast: true
   disable-all: true
   enable:
     - bodyclose

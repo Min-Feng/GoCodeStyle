@@ -13,7 +13,7 @@ func FormatToRawJSON(prettyJSON []byte) []byte {
 	m.AddFuncRegexp(regexp.MustCompile("[/+]json$"), json.Minify)
 	rawJSON, err := m.Bytes("application/json", prettyJSON)
 	if err != nil {
-		log.Fatal().Err(err).Msg("FormatToRawJSON:")
+		log.Fatal().Msgf("FormatToRawJSON: %v", err)
 	}
 	return rawJSON
 }

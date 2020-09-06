@@ -16,9 +16,9 @@ import (
 )
 
 func TestNewRecoverableDB_SyncRequest(t *testing.T) {
-	// helperlog.Init(helperlog.Disabled, helperlog.WriterKindHuman)
-	// helperlog.Init(helperlog.DebugLevel, helperlog.WriterKindJSON)
-	helperlog.DeveloperMode()
+	helperlog.SetGlobal(helperlog.Disabled, helperlog.WriterKindHuman)
+	// helperlog.FixBugMode()
+	// helperlog.DeveloperMode()
 
 	// 不包含初始化的那次
 	// 後續進行 retry init, 會產生 x= 7次 nil DB
@@ -52,8 +52,8 @@ func TestNewRecoverableDB_SyncRequest(t *testing.T) {
 }
 
 func TestNewRecoverableDB_AsyncRequest(t *testing.T) {
-	// helperlog.Init(helperlog.Disabled, helperlog.WriterKindHuman)
-	helperlog.DeveloperMode()
+	helperlog.SetGlobal(helperlog.Disabled, helperlog.WriterKindHuman)
+	// helperlog.DeveloperMode()
 
 	maxNilCount := 7
 	var count int

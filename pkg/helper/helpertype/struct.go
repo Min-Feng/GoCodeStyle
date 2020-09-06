@@ -4,6 +4,7 @@ import (
 	"errors"
 	"reflect"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/morikuni/failure"
 	"github.com/rs/zerolog/log"
 )
@@ -13,13 +14,13 @@ type FieldName = string
 type StructTool struct{}
 
 func (StructTool) FilterZeroValueField(raw interface{}, tagKey string) map[FieldName]interface{} {
-	if !isStructType(raw) {
-		log.Fatal().Msg("is not struct type")
-	}
-
 	v := reflect.ValueOf(raw)
 	if v.IsZero() {
 		return map[string]interface{}{}
+	}
+
+	if !isStructType(raw) {
+		log.Fatal().Msg("is not struct type")
 	}
 
 	var values map[string]interface{}
@@ -29,13 +30,8 @@ func (StructTool) FilterZeroValueField(raw interface{}, tagKey string) map[Field
 	case reflect.Struct:
 		values, err = filter(raw, tagKey)
 	case reflect.Ptr:
-		var originValue interface{}
-		if v.IsNil() {
-			originValue = reflect.Indirect(v)
-		} else {
-			originValue = v.Elem().Interface()
-		}
-		values, err = filter(originValue, tagKey)
+		instanceRaw := v.Elem().Interface()
+		values, err = filter(instanceRaw, tagKey)
 	}
 
 	if err != nil {
@@ -50,15 +46,17 @@ func isStructType(raw interface{}) bool {
 	case reflect.Struct:
 		return true
 	case reflect.Ptr:
-		var originValue interface{}
+		var instanceRaw interface{}
 
 		if v.IsNil() {
-			originValue = reflect.Indirect(v)
+			// panic: reflect: call of reflect.Value.Interface on zero Value
+			// instanceRaw = reflect.Indirect(v).Interface()
+			instanceRaw = ReflectTool{}.NewInstanceValueByPtrValue(v).Interface()
 		} else {
-			originValue = v.Elem().Interface()
+			instanceRaw = v.Elem().Interface()
 		}
 
-		return isStructType(originValue)
+		return isStructType(instanceRaw)
 	}
 	return false
 }
@@ -75,9 +73,8 @@ func filter(raw interface{}, tagKey string) (map[FieldName]interface{}, error) {
 		if log.Trace().Enabled() {
 			fieldType := structType.Field(i)
 			log.Trace().
-				Str("FieldName", fieldType.Name).
 				Bool("IsZero", fieldValue.IsZero()).
-				Msg(structType.Name())
+				Msgf("%v %v=%#v", structType.Name(), fieldType.Name, spew.NewFormatter(fieldValue.Interface()))
 		}
 
 		if fieldValue.IsZero() { // filter condition

@@ -13,9 +13,9 @@ import (
 	"ddd/pkg/domain"
 )
 
-// UnitTestMode 提供 _test.go 使用, 避免執行命令 go test 輸出時, 有多餘 log 訊息
-func UnitTestMode() {
-	SetGlobal(ErrorLevel, WriterKindHuman)
+//noinspection GoUnusedExportedFunction
+func FixBugMode() {
+	SetGlobal(TraceLevel, WriterKindHuman)
 }
 
 // DeveloperMode 開發期間, 進行單元測試, 查看 log 格式是否符合預期
@@ -25,9 +25,13 @@ func DeveloperMode() {
 	SetGlobal(DebugLevel, WriterKindHuman)
 }
 
-//noinspection GoUnusedExportedFunction
-func FixBugMode() {
-	SetGlobal(TraceLevel, WriterKindHuman)
+func DefaultMode() {
+	SetGlobal(InfoLevel, WriterKindHuman)
+}
+
+// UnitTestMode 提供 _test.go 使用, 避免執行命令 go test 輸出時, 有多餘 log 訊息
+func UnitTestMode() {
+	SetGlobal(ErrorLevel, WriterKindHuman)
 }
 
 func SetGlobal(logLevel Level, wKind WriterKind) error {

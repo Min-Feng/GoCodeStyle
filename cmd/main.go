@@ -21,6 +21,7 @@ import (
 // 不知道 log level, 所以先使用一個預設等級
 func init() {
 	helperlog.Init()
+	helperlog.DefaultMode()
 	configs.Init()
 }
 
