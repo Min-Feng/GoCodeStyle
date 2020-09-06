@@ -46,8 +46,8 @@ type RecoverableDB struct {
 
 func (reDB *RecoverableDB) forUnitTest() (Err error) {
 	defer func() {
-		// 只有在當前函數發生 panic
-		// 呼叫 recover 才可以捕捉到 panic message
+		// 呼叫 recover
+		// 一定要在 defer 作用域之內, 才可以捕捉到 panic message
 		// 若是重構為成函數來呼叫
 		// 要注意該函數不可包含 if panicMsg := recover(); panicMsg != nil {
 		if panicMsg := recover(); panicMsg != nil {
