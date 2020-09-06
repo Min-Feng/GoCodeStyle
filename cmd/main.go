@@ -28,24 +28,27 @@ func init() {
 func main() {
 	log.Info().Msg("MainStart")
 
-	configSRC := strings.ToLower(os.Getenv("CONF_SRC"))
-	cfg := NewConfig(configSRC)
+	cfg := NewConfig()
 	helperlog.SetGlobal(cfg.LogLevel, helperlog.WriterKindHuman)
 
 	mysql.NewDB(&cfg.MySQL)
 
-	debugHandler := &api.DebugHandler{}
 	router := api.NewRouter(cfg.LogLevel)
-	router.PUT("debug/logLevel", debugHandler.UpdateLogLevel)
+	server := api.NewServer(":"+cfg.Port, router)
 
-	if err := router.Run(":" + cfg.Port); err != nil {
+	debugHandler := &api.DebugHandler{}
+	server.RegisterHandler(debugHandler)
+
+	err := server.Start()
+	if err != nil {
 
 	}
 }
 
-func NewConfig(src string) *configs.ProjectConfig {
+func NewConfig() *configs.ProjectConfig {
 	var repo configs.ProjectConfigRepo
 
+	src := strings.ToLower(os.Getenv("CONF_SRC"))
 	switch src {
 	case "local":
 		fileName := os.Getenv("FILE_NAME")

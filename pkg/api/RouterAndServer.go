@@ -6,20 +6,28 @@ import (
 	"ddd/pkg/helper/helperlog"
 )
 
+func NewServer(address string, router *gin.Engine) *Server {
+	return &Server{address: address, router: router}
+}
+
 type Server struct {
 	address string
-	engine  *gin.Engine
+	router  *gin.Engine
+}
+
+func (s *Server) RegisterHandler(dHandler *DebugHandler) {
+	s.router.PUT("debug/logLevel", dHandler.UpdateLogLevel)
 }
 
 func (s *Server) Start() error {
-	return s.engine.Run(s.address)
+	return s.router.Run(s.address)
 }
 
 func NewRouter(logLevel helperlog.Level) *gin.Engine {
 	switch logLevel {
 	case helperlog.TraceLevel, helperlog.DebugLevel:
 		gin.SetMode(gin.DebugMode)
-	case helperlog.InfoLevel:
+	default:
 		gin.SetMode(gin.ReleaseMode)
 	}
 	gin.DisableConsoleColor()
