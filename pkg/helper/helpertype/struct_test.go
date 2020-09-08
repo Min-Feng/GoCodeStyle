@@ -40,6 +40,7 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 		{
 			rawStruct: &QueryCondition{
 				CreatedTime: mock.Time("2020-08-23"),
+				Orders:      []string{}, // reflect.ValueOf([]string{}).IsZero=false
 				UserName:    "caesar",
 			},
 			expectedMap: map[helpertype.FieldName]interface{}{
@@ -61,7 +62,7 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 			name: "field have value but is js null",
 			rawStruct: &QueryCondition{
 				Age:           (*int)(nil),
-				NullableValue: (*float64)(nil), // note!! reflect.ValueOf(field).IsZero=false
+				NullableValue: (*float64)(nil), // reflect.ValueOf((*float64)(nil)).IsZero=false
 			},
 			expectedMap: map[string]interface{}{
 				"money": (*float64)(nil),

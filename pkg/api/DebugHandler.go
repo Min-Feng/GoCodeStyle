@@ -22,7 +22,7 @@ func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 	if err := c.ShouldBindJSON(payload); err != nil {
 		Err := failure.Translate(err, domain.ErrValidate)
 		c.Set("Error", Err)
-		log.Error().Msgf("%v", Err)
+		log.Error().Msgf("Show ShouldBindJSON error stack%v", Err)
 		return
 	}
 	// log.Info().Msgf("payload=%#v", spew.NewFormatter(payload))
@@ -33,7 +33,7 @@ func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 		c.Set("Error", Err)
 		log.Error().Msgf("%v", Err)
 		if log.Debug().Enabled() {
-			log.Error().Msgf("\n%+v", Err)
+			log.Error().Msgf("Show SetGlobal error stack\n%+v", Err)
 		}
 		return
 	}

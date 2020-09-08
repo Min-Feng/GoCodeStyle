@@ -77,8 +77,8 @@ func filter(raw interface{}, tagKey string) (map[FieldName]interface{}, error) {
 				Msgf("%v %v=%#v", structType.Name(), fieldType.Name, spew.NewFormatter(fieldValue.Interface()))
 		}
 
-		if fieldValue.IsZero() { // filter condition
-			fieldValue.IsValid()
+		// filter condition
+		if !isFieldValueValid(fieldValue) {
 			continue
 		}
 
@@ -90,4 +90,17 @@ func filter(raw interface{}, tagKey string) (map[FieldName]interface{}, error) {
 		values[fieldTagName] = fieldValue.Interface()
 	}
 	return values, nil
+}
+
+func isFieldValueValid(fieldValue reflect.Value) bool {
+	if fieldValue.IsZero() {
+		return false
+	}
+	if fieldValue.Kind() == reflect.Slice && fieldValue.Len() == 0 {
+		return false
+	}
+	if fieldValue.Kind() == reflect.Map && fieldValue.Len() == 0 {
+		return false
+	}
+	return true
 }
