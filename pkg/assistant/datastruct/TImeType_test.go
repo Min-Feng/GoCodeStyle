@@ -1,4 +1,4 @@
-package helpertype_test
+package datastruct_test
 
 import (
 	"encoding/json"
@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/helper/helpertest/mock"
-	"ddd/pkg/helper/helpertype"
+	"ddd/pkg/assistant/datastruct"
+	"ddd/pkg/assistant/mock"
 )
 
 func TestTime(t *testing.T) {
@@ -20,7 +20,7 @@ type TimeTestSuite struct {
 
 func (ts *TimeTestSuite) TestUnmarshalJSON() {
 	type Payload struct {
-		Time helpertype.Time `json:"datetime"`
+		Time datastruct.Time `json:"datetime"`
 	}
 
 	tests := []struct {
@@ -58,7 +58,7 @@ func (ts *TimeTestSuite) TestUnmarshalJSON() {
 
 func (ts *TimeTestSuite) TestMarshalJSON() {
 	type Payload struct {
-		Time helpertype.Time `json:"datetime"`
+		Time datastruct.Time `json:"datetime"`
 	}
 
 	tests := []struct {

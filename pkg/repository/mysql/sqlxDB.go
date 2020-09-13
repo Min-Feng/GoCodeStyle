@@ -5,7 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/configs"
+	"ddd/pkg/assistant/configs"
 )
 
 func NewDB(cfg *configs.MySQL) *sqlx.DB {

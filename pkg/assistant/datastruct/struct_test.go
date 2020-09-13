@@ -1,4 +1,4 @@
-package helpertype_test
+package datastruct_test
 
 import (
 	"testing"
@@ -7,15 +7,15 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 
-	"ddd/pkg/helper/helpertest/mock"
-	"ddd/pkg/helper/helpertype"
+	"ddd/pkg/assistant/datastruct"
+	"ddd/pkg/assistant/mock"
 )
 
 func TestStructTool_FilterZeroValueField(t *testing.T) {
-	// helperlog.FixBugMode()
+	// logger.FixBugMode()
 
 	type QueryCondition struct {
-		CreatedTime   helpertype.Time `db:"created_time"`
+		CreatedTime   datastruct.Time `db:"created_time"`
 		UserName      string          `db:"user_name"`
 		Orders        []string        `db:"order"`
 		Age           *int            `db:"age"`
@@ -25,14 +25,14 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 	tests := []struct {
 		name        string
 		rawStruct   *QueryCondition
-		expectedMap map[helpertype.FieldName]interface{}
+		expectedMap map[datastruct.FieldName]interface{}
 	}{
 		{
 			rawStruct: &QueryCondition{
 				UserName: "caesar",
 				Orders:   []string{"book", "tea"},
 			},
-			expectedMap: map[helpertype.FieldName]interface{}{
+			expectedMap: map[datastruct.FieldName]interface{}{
 				"user_name": "caesar",
 				"order":     []string{"book", "tea"},
 			},
@@ -43,7 +43,7 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 				Orders:      []string{}, // reflect.ValueOf([]string{}).IsZero=false
 				UserName:    "caesar",
 			},
-			expectedMap: map[helpertype.FieldName]interface{}{
+			expectedMap: map[datastruct.FieldName]interface{}{
 				"created_time": mock.Time("2020-08-23"),
 				"user_name":    "caesar",
 			},
@@ -75,7 +75,7 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			log.Debug().Msgf("\n%v", spew.Sdump(tt.rawStruct))
 
-			actualMap := helpertype.StructTool{}.FilterZeroValueField(tt.rawStruct, "db")
+			actualMap := datastruct.StructTool{}.FilterZeroValueField(tt.rawStruct, "db")
 			assert.Equal(t, tt.expectedMap, actualMap)
 		})
 	}

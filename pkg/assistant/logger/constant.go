@@ -1,4 +1,4 @@
-package helperlog
+package logger
 
 type Level = string
 

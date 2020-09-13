@@ -6,14 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/configs"
-	"ddd/pkg/helper/helperlog"
-	"ddd/pkg/helper/helpertest/mock"
+	"ddd/pkg/assistant/configs"
+	"ddd/pkg/assistant/mock"
 )
-
-func init() {
-	helperlog.UnitTestMode()
-}
 
 func TestProjectConfigRepo(t *testing.T) {
 	suite.Run(t, new(ProjectConfigRepoTestSuite))

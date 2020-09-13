@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"ddd/pkg/helper/helpertype"
+	"ddd/pkg/assistant/datastruct"
 )
 
 type MemberRepo interface {
@@ -11,6 +11,6 @@ type MemberRepo interface {
 
 type Member struct {
 	MemberID    string          `db:"member_id"`
-	CreatedDate helpertype.Time `db:"created_date"`
+	CreatedDate datastruct.Time `db:"created_date"`
 	SelfIntro   *string         `db:"self_intro"`
 }

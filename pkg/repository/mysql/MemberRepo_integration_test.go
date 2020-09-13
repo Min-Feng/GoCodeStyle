@@ -7,15 +7,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"ddd/pkg/assistant/datastruct"
+	"ddd/pkg/assistant/logger"
+	"ddd/pkg/assistant/mock"
 	"ddd/pkg/domain"
-	"ddd/pkg/helper/helperlog"
-	"ddd/pkg/helper/helpertest/mock"
-	"ddd/pkg/helper/helpertype"
 	"ddd/pkg/repository/mysql"
 )
 
 func TestMemberRepo_Add(t *testing.T) {
-	helperlog.DeveloperMode()
+	logger.DeveloperMode()
 	db := mysql.NewDB(&mock.Config.MySQL)
 	repo := mysql.NewMemberRepo(db)
 
@@ -26,7 +26,7 @@ func TestMemberRepo_Add(t *testing.T) {
 		{
 			member: &domain.Member{
 				MemberID:    "a1",
-				CreatedDate: helpertype.Time{Time: mock.TimeNowFunc("1988-05-14")()},
+				CreatedDate: datastruct.Time{Time: mock.TimeNowFunc("1988-05-14")()},
 			},
 		},
 		// {
@@ -47,7 +47,7 @@ func TestMemberRepo_Add(t *testing.T) {
 }
 
 func TestMemberRepo_Find(t *testing.T) {
-	helperlog.DeveloperMode()
+	logger.DeveloperMode()
 	cfg := mock.Config
 	db := mysql.NewDB(&cfg.MySQL)
 	repo := mysql.NewMemberRepo(db)

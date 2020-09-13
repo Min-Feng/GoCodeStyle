@@ -14,10 +14,10 @@ const (
 )
 
 func NewApolloRepo(remoteAddress string) ProjectConfigRepo {
-	return newApollo(remoteAddress, ApolloAppID, ApolloCluster, ApolloNamespaces)
+	return newApolloRepo(remoteAddress, ApolloAppID, ApolloCluster, ApolloNamespaces)
 }
 
-func newApollo(remoteAddress string, appID string, clusterName string, namespace string) ProjectConfigRepo {
+func newApolloRepo(remoteAddress string, appID string, clusterName string, namespace string) ProjectConfigRepo {
 	remote.SetAppID(appID)
 	remote.SetConfigType("prop")
 	remote.SetAgolloOptions(

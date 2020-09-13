@@ -7,8 +7,8 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"ddd/pkg/api"
-	"ddd/pkg/configs"
-	"ddd/pkg/helper/helperlog"
+	"ddd/pkg/assistant/configs"
+	"ddd/pkg/assistant/logger"
 	"ddd/pkg/repository/mysql"
 )
 
@@ -20,8 +20,8 @@ import (
 // 由於還沒讀取到 config 的設定
 // 不知道 log level, 所以先使用一個預設等級
 func init() {
-	helperlog.Init()
-	helperlog.DefaultMode()
+	logger.Init()
+	logger.DefaultMode()
 	configs.Init()
 }
 
@@ -29,17 +29,16 @@ func main() {
 	log.Info().Msg("MainStart")
 
 	cfg := NewConfig()
-	helperlog.SetGlobal(cfg.LogLevel, helperlog.WriterKindHuman)
+	logger.SetGlobal(cfg.LogLevel, logger.WriterKindHuman)
 
 	mysql.NewDB(&cfg.MySQL)
 
-	router := api.NewRouter(cfg.LogLevel)
-	server := api.NewServer(":"+cfg.Port, router)
+	router := api.NewRouter(":"+cfg.Port, cfg.LogLevel)
 
 	debugHandler := &api.DebugHandler{}
-	server.RegisterHandler(debugHandler)
+	router.RegisterHandler(debugHandler)
 
-	err := server.Start()
+	err := router.QuicklyStart()
 	if err != nil {
 
 	}

@@ -6,14 +6,14 @@ import (
 	"github.com/spf13/viper"
 )
 
-type LocalRepo = projectConfigRepo
-type ApolloRepo = projectConfigRepo
+type LocalRepo = ProjectConfigRepoImp
+type ApolloRepo = ProjectConfigRepoImp
 
-type projectConfigRepo struct {
+type ProjectConfigRepoImp struct {
 	*viper.Viper
 }
 
-func (repo *projectConfigRepo) Find() *ProjectConfig {
+func (repo *ProjectConfigRepoImp) Find() *ProjectConfig {
 	cfg := new(ProjectConfig)
 
 	option := func(c *mapstructure.DecoderConfig) { c.TagName = "configs" }

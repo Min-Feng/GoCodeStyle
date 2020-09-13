@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"ddd/pkg/configs"
+	"ddd/pkg/assistant/configs"
 )
 
 type ProjectConfigRepo struct{}

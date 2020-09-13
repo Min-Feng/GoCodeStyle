@@ -1,4 +1,4 @@
-package helperlog
+package logger
 
 //nolint:gochecknoglobals
 var ModuleDirectory []string

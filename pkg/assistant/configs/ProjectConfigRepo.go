@@ -3,7 +3,7 @@ package configs
 import (
 	"fmt"
 
-	"ddd/pkg/helper/helperlog"
+	"ddd/pkg/assistant/logger"
 )
 
 type ProjectConfigRepo interface {
@@ -11,11 +11,11 @@ type ProjectConfigRepo interface {
 }
 
 type ProjectConfig struct {
-	Name       string          `configs:"name"`
-	Port       string          `configs:"port"`
-	AlarmEmail string          `configs:"alarm_email"`
-	LogLevel   helperlog.Level `configs:"log_level"`
-	MySQL      MySQL           `configs:"mysql"`
+	Name       string       `configs:"name"`
+	Port       string       `configs:"port"`
+	AlarmEmail string       `configs:"alarm_email"`
+	LogLevel   logger.Level `configs:"log_level"`
+	MySQL      MySQL        `configs:"mysql"`
 }
 
 type MySQL struct {

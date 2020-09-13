@@ -11,13 +11,13 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/assert"
 
-	"ddd/pkg/helper/helperlog"
-	"ddd/pkg/helper/helpertest/mock"
+	"ddd/pkg/assistant/logger"
+	"ddd/pkg/assistant/mock"
 )
 
 func TestNewRecoverableDB_SyncRequest(t *testing.T) {
-	helperlog.SetGlobal(helperlog.Disabled, helperlog.WriterKindHuman)
-	// helperlog.DeveloperMode()
+	logger.SetGlobal(logger.Disabled, logger.WriterKindHuman)
+	// logger.DeveloperMode()
 
 	// 不包含初始化的那次
 	// 後續進行 retry init, 會產生 x= 7次 nil DB
@@ -51,8 +51,8 @@ func TestNewRecoverableDB_SyncRequest(t *testing.T) {
 }
 
 func TestNewRecoverableDB_AsyncRequest(t *testing.T) {
-	helperlog.SetGlobal(helperlog.Disabled, helperlog.WriterKindHuman)
-	// helperlog.DeveloperMode()
+	logger.SetGlobal(logger.Disabled, logger.WriterKindHuman)
+	// logger.DeveloperMode()
 
 	maxNilCount := 7
 	var count int

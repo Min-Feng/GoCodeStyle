@@ -7,8 +7,8 @@ import (
 	"github.com/morikuni/failure"
 	"github.com/rs/zerolog/log"
 
+	"ddd/pkg/assistant/logger"
 	"ddd/pkg/domain"
-	"ddd/pkg/helper/helperlog"
 )
 
 type DebugHandler struct{}
@@ -27,7 +27,7 @@ func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 	}
 	// log.Info().Msgf("payload=%#v", spew.NewFormatter(payload))
 
-	err := helperlog.SetGlobal(payload.LogLevel, helperlog.WriterKindHuman)
+	err := logger.SetGlobal(payload.LogLevel, logger.WriterKindHuman)
 	if err != nil {
 		Err := failure.Wrap(err)
 		c.Set("Error", Err)

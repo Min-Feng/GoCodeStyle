@@ -1,4 +1,4 @@
-package helpertype
+package datastruct
 
 import (
 	"errors"
@@ -13,6 +13,7 @@ type FieldName = string
 
 type StructTool struct{}
 
+// FilterZeroValueField can transform data from struct type to map type: map[string]interface{}v
 func (StructTool) FilterZeroValueField(raw interface{}, tagKey string) map[FieldName]interface{} {
 	v := reflect.ValueOf(raw)
 	if v.IsZero() {
@@ -23,7 +24,7 @@ func (StructTool) FilterZeroValueField(raw interface{}, tagKey string) map[Field
 		log.Fatal().Msg("is not struct type")
 	}
 
-	var values map[string]interface{}
+	var values map[FieldName]interface{}
 	var err error
 
 	switch v.Kind() {
