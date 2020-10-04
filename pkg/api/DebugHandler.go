@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/morikuni/failure"
@@ -15,7 +16,8 @@ type DebugHandler struct{}
 
 func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 	type Payload struct {
-		LogLevel string `json:"log_level"`
+		LogLevel   string    `json:"log_level" binding:"required"`
+		UpdateTime time.Time `json:"UpdateTime" binding:"AutoSetTime"`
 	}
 
 	payload := new(Payload)

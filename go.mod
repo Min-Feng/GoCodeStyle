@@ -6,6 +6,7 @@ require (
 	github.com/Masterminds/squirrel v1.4.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/mitchellh/mapstructure v1.3.2

@@ -23,6 +23,7 @@ func init() {
 	logger.Init()
 	logger.DefaultMode()
 	configs.Init()
+	api.Init()
 }
 
 func main() {

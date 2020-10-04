@@ -2,6 +2,7 @@ package configs
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -15,6 +16,7 @@ func NewLocalRepo(configFileName string) ProjectConfigRepo {
 	}
 
 	workDir, err := os.Getwd()
+	workDir = filepath.ToSlash(workDir) // for window os
 	if err != nil {
 		log.Fatal().Msgf("Not get work directory: %v", err)
 	}
