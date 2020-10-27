@@ -16,10 +16,10 @@ func ErrorResponseMiddleware(c *gin.Context) {
 	}
 
 	Err := err.(error)
-	checkoutResponse(c, Err)
+	writeErrorResponse(c, Err)
 }
 
-func checkoutResponse(c *gin.Context, err error) {
+func writeErrorResponse(c *gin.Context, err error) {
 	if err == nil {
 		return
 	}
