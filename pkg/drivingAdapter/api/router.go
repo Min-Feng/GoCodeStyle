@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"ddd/pkg/assistant/logger"
+	"ddd/pkg/technical/logger"
 )
 
 func NewRouter(address string, logLevel logger.Level) *Router {

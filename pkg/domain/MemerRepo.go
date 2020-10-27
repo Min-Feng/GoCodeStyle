@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"ddd/pkg/assistant/datastruct"
+	"ddd/pkg/technical/datastruct"
 )
 
 type MemberRepo interface {

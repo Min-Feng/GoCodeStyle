@@ -8,8 +8,8 @@ import (
 	"github.com/morikuni/failure"
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/assistant/logger"
 	"ddd/pkg/domain"
+	"ddd/pkg/technical/logger"
 )
 
 type DebugHandler struct{}

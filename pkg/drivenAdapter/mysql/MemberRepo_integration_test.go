@@ -7,11 +7,11 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"ddd/pkg/assistant/datastruct"
-	"ddd/pkg/assistant/logger"
-	"ddd/pkg/assistant/mock"
 	"ddd/pkg/domain"
-	"ddd/pkg/repository/mysql"
+	"ddd/pkg/drivenAdapter/mysql"
+	"ddd/pkg/technical/datastruct"
+	"ddd/pkg/technical/logger"
+	"ddd/pkg/technical/mock"
 )
 
 func TestMemberRepo_Add(t *testing.T) {

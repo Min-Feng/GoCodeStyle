@@ -7,8 +7,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 
-	"ddd/pkg/assistant/datastruct"
-	"ddd/pkg/assistant/mock"
+	"ddd/pkg/technical/datastruct"
+	"ddd/pkg/technical/mock"
 )
 
 func TestStructTool_FilterZeroValueField(t *testing.T) {

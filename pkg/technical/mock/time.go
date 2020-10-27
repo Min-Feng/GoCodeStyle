@@ -5,7 +5,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/assistant/datastruct"
+	"ddd/pkg/technical/datastruct"
 )
 
 // 提供 fake 標準庫的時間型別

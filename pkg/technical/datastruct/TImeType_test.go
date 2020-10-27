@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/assistant/datastruct"
-	"ddd/pkg/assistant/mock"
+	"ddd/pkg/technical/datastruct"
+	"ddd/pkg/technical/mock"
 )
 
 func TestTime(t *testing.T) {

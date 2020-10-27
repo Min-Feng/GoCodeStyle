@@ -6,10 +6,10 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/assistant/datastruct"
-	"ddd/pkg/assistant/logger"
-	"ddd/pkg/assistant/mock"
-	"ddd/pkg/repository/mysql"
+	"ddd/pkg/drivenAdapter/mysql"
+	"ddd/pkg/technical/datastruct"
+	"ddd/pkg/technical/logger"
+	"ddd/pkg/technical/mock"
 )
 
 func TestGenericSQLBuilder(t *testing.T) {

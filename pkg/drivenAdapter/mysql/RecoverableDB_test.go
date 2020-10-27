@@ -11,8 +11,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/assert"
 
-	"ddd/pkg/assistant/logger"
-	"ddd/pkg/assistant/mock"
+	"ddd/pkg/technical/logger"
+	"ddd/pkg/technical/mock"
 )
 
 func TestNewRecoverableDB_SyncRequest(t *testing.T) {

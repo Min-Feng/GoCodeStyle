@@ -6,10 +6,10 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/api"
-	"ddd/pkg/assistant/configs"
-	"ddd/pkg/assistant/logger"
-	"ddd/pkg/repository/mysql"
+	"ddd/pkg/drivenAdapter/mysql"
+	"ddd/pkg/drivingAdapter/api"
+	"ddd/pkg/technical/configs"
+	"ddd/pkg/technical/logger"
 )
 
 // 有 init 表示存在全域變數, 非 lib 類型的專案, 全域變數不是好選擇

@@ -3,7 +3,7 @@ package configs
 import (
 	"fmt"
 
-	"ddd/pkg/assistant/logger"
+	"ddd/pkg/technical/logger"
 )
 
 type ProjectConfigRepo interface {

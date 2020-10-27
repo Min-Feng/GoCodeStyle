@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/assistant/configs"
-	"ddd/pkg/assistant/mock"
+	"ddd/pkg/technical/configs"
+	"ddd/pkg/technical/mock"
 )
 
 func TestProjectConfigRepo(t *testing.T) {

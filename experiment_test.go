@@ -8,7 +8,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 
-	"ddd/pkg/assistant/logger"
+	"ddd/pkg/technical/logger"
 )
 
 func init() {
