@@ -1,4 +1,4 @@
-package mysql
+package part
 
 import (
 	_ "github.com/go-sql-driver/mysql"
@@ -8,7 +8,7 @@ import (
 	"ddd/pkg/technical/configs"
 )
 
-func NewDB(cfg *configs.MySQL) *sqlx.DB {
+func NewMySQL(cfg *configs.MySQL) *sqlx.DB {
 	db, err := sqlx.Connect("mysql", cfg.DSN())
 	if err != nil {
 		log.Error().Err(err).Msg("Connect mysql db failed:")

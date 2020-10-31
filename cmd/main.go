@@ -6,8 +6,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/drivenAdapter/mysql"
 	"ddd/pkg/drivingAdapter/api"
+	helperlog "ddd/pkg/infra/part"
 	"ddd/pkg/technical/configs"
 	"ddd/pkg/technical/logger"
 )
@@ -32,7 +32,7 @@ func main() {
 	cfg := NewConfig()
 	logger.SetGlobal(cfg.LogLevel, logger.WriterKindHuman)
 
-	mysql.NewDB(&cfg.MySQL)
+	helperlog.NewMySQL(&cfg.MySQL)
 
 	router := api.NewRouter(":"+cfg.Port, cfg.LogLevel)
 

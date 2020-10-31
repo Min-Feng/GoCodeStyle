@@ -1,4 +1,4 @@
-package datastruct
+package types
 
 import (
 	"reflect"

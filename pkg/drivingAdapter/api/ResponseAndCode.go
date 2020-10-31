@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"ddd/pkg/domain"
+	"ddd/pkg/domain/basic"
 )
 
 // Response
@@ -26,19 +26,19 @@ type ResponseCode struct {
 }
 
 var ErrCodeLookup = map[string]ResponseCode{
-	domain.ErrDB.ErrorCode(): {
+	basic.ErrDB.ErrorCode(): {
 		HTTPCode:       http.StatusInternalServerError,
 		CustomizedCode: 5000,
 	},
-	domain.ErrNotFound.ErrorCode(): {
+	basic.ErrNotFound.ErrorCode(): {
 		HTTPCode:       http.StatusNotFound,
 		CustomizedCode: 4040,
 	},
-	domain.ErrValidate.ErrorCode(): {
+	basic.ErrValidate.ErrorCode(): {
 		HTTPCode:       http.StatusBadRequest,
 		CustomizedCode: 4000,
 	},
-	domain.ErrServer.ErrorCode(): {
+	basic.ErrServer.ErrorCode(): {
 		HTTPCode:       http.StatusInternalServerError,
 		CustomizedCode: 5000,
 	},

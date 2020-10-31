@@ -1,4 +1,4 @@
-package mysql_test
+package shared_test
 
 import (
 	"testing"
@@ -6,10 +6,10 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/drivenAdapter/mysql"
-	"ddd/pkg/technical/datastruct"
+	"ddd/pkg/infra/shared"
 	"ddd/pkg/technical/logger"
 	"ddd/pkg/technical/mock"
+	"ddd/pkg/technical/types"
 )
 
 func TestGenericSQLBuilder(t *testing.T) {
@@ -18,13 +18,13 @@ func TestGenericSQLBuilder(t *testing.T) {
 
 type GenericSQLBuilderTestSuite struct {
 	suite.Suite
-	gSQL mysql.GenericSQLBuilder
+	gSQL shared.GenericSQLBuilder
 }
 
 func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {
 	b := ts.gSQL.IsTheRowExist("member_id", 2, "myTable")
 	actualNamedSQL := sq.DebugSqlizer(b)
-	expectedSQL := datastruct.StringTool{}.ToRawSQL(`
+	expectedSQL := types.StringTool{}.ToRawSQL(`
 SELECT member_id 
 FROM myTable 
 WHERE member_id = '2' 
@@ -45,23 +45,23 @@ func (ts *GenericSQLBuilderTestSuite) TestTimeRange() {
 		expectedSQL      string
 	}{
 		{
-			name:             "Have End StandardTime",
-			startTime:        datastruct.Time{mock.StandardTime("2020-08-19 19:43:00")},
-			endTime:          datastruct.Time{mock.StandardTime("2020-08-21 00:00:00")},
+			name:             "Have End StdTime",
+			startTime:        types.Time{mock.StdTime("2020-08-19 19:43:00")},
+			endTime:          types.Time{mock.StdTime("2020-08-21 00:00:00")},
 			expectedNamedSQL: "(created_time >= '2020-08-19 19:43:00' AND created_time <= '2020-08-21 00:00:00')",
 			expectedSQL:      "(created_time >= ? AND created_time <= ?)",
 		},
 		{
-			name:             "No End StandardTime",
-			startTime:        datastruct.Time{mock.StandardTime("2020-08-19 19:43:00")},
+			name:             "No End StdTime",
+			startTime:        types.Time{mock.StdTime("2020-08-19 19:43:00")},
 			endTime:          nil,
 			expectedNamedSQL: "created_time >= '2020-08-19 19:43:00'",
 			expectedSQL:      "created_time >= ?",
 		},
 		{
-			name:             "No QuicklyStart StandardTime",
+			name:             "No QuicklyStart StdTime",
 			startTime:        nil,
-			endTime:          datastruct.Time{mock.StandardTime("2020-08-19 19:43:00")},
+			endTime:          types.Time{mock.StdTime("2020-08-19 19:43:00")},
 			expectedNamedSQL: "created_time <= '2020-08-19 19:43:00'",
 			expectedSQL:      "created_time <= ?",
 		},

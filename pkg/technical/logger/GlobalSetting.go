@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/domain"
+	"ddd/pkg/domain/basic"
 )
 
 //noinspection GoUnusedExportedFunction
@@ -78,7 +78,7 @@ func SetGlobal(logLevel Level, wKind WriterKind) error {
 		}
 
 		msg = append(msg, failure.Message("so reset level to InfoLevel"))
-		return failure.New(domain.ErrValidate, msg...)
+		return failure.New(basic.ErrValidate, msg...)
 	}
 
 	return nil

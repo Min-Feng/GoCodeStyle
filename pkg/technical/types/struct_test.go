@@ -1,4 +1,4 @@
-package datastruct_test
+package types_test
 
 import (
 	"testing"
@@ -7,32 +7,32 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 
-	"ddd/pkg/technical/datastruct"
 	"ddd/pkg/technical/mock"
+	"ddd/pkg/technical/types"
 )
 
 func TestStructTool_FilterZeroValueField(t *testing.T) {
 	// logger.FixBugMode()
 
 	type QueryCondition struct {
-		CreatedTime   datastruct.Time `db:"created_time"`
-		UserName      string          `db:"user_name"`
-		Orders        []string        `db:"order"`
-		Age           *int            `db:"age"`
-		NullableValue interface{}     `db:"money"`
+		CreatedTime   types.Time  `db:"created_time"`
+		UserName      string      `db:"user_name"`
+		Orders        []string    `db:"order"`
+		Age           *int        `db:"age"`
+		NullableValue interface{} `db:"money"`
 	}
 
 	tests := []struct {
 		name        string
 		rawStruct   *QueryCondition
-		expectedMap map[datastruct.FieldName]interface{}
+		expectedMap map[types.FieldName]interface{}
 	}{
 		{
 			rawStruct: &QueryCondition{
 				UserName: "caesar",
 				Orders:   []string{"book", "tea"},
 			},
-			expectedMap: map[datastruct.FieldName]interface{}{
+			expectedMap: map[types.FieldName]interface{}{
 				"user_name": "caesar",
 				"order":     []string{"book", "tea"},
 			},
@@ -43,7 +43,7 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 				Orders:      []string{}, // reflect.ValueOf([]string{}).IsZero=false
 				UserName:    "caesar",
 			},
-			expectedMap: map[datastruct.FieldName]interface{}{
+			expectedMap: map[types.FieldName]interface{}{
 				"created_time": mock.Time("2020-08-23"),
 				"user_name":    "caesar",
 			},
@@ -75,7 +75,7 @@ func TestStructTool_FilterZeroValueField(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			log.Debug().Msgf("\n%v", spew.Sdump(tt.rawStruct))
 
-			actualMap := datastruct.StructTool{}.FilterZeroValueField(tt.rawStruct, "db")
+			actualMap := types.StructTool{}.FilterZeroValueField(tt.rawStruct, "db")
 			assert.Equal(t, tt.expectedMap, actualMap)
 		})
 	}

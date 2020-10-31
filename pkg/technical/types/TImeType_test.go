@@ -1,4 +1,4 @@
-package datastruct_test
+package types_test
 
 import (
 	"encoding/json"
@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/technical/datastruct"
 	"ddd/pkg/technical/mock"
+	"ddd/pkg/technical/types"
 )
 
 func TestTime(t *testing.T) {
@@ -20,7 +20,7 @@ type TimeTestSuite struct {
 
 func (ts *TimeTestSuite) TestUnmarshalJSON() {
 	type Payload struct {
-		Time datastruct.Time `json:"datetime"`
+		Time types.Time `json:"datetime"`
 	}
 
 	tests := []struct {
@@ -58,7 +58,7 @@ func (ts *TimeTestSuite) TestUnmarshalJSON() {
 
 func (ts *TimeTestSuite) TestMarshalJSON() {
 	type Payload struct {
-		Time datastruct.Time `json:"datetime"`
+		Time types.Time `json:"datetime"`
 	}
 
 	tests := []struct {

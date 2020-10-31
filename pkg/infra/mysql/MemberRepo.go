@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"context"
 	"database/sql"
 
 	sq "github.com/Masterminds/squirrel"
@@ -10,6 +11,8 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"ddd/pkg/domain"
+	"ddd/pkg/domain/basic"
+	"ddd/pkg/infra/shared"
 )
 
 const TableNameMember = "member"
@@ -23,14 +26,15 @@ type MemberRepo struct {
 	sqlBuilder MemberRepoSQLBuilder
 }
 
-func (repo *MemberRepo) Find(memberID string) (*domain.Member, error) {
+func (repo *MemberRepo) FindByID(ctx context.Context, memberID string) (*domain.Member, error) {
+	ext := shared.GetTxOrDB(context.Background(), repo.db)
 	member := new(domain.Member)
 
-	sqlString, args, _ := repo.sqlBuilder.Find(memberID).ToSql()
-	err := repo.db.Get(member, sqlString, args...)
+	sqlString, args, _ := repo.sqlBuilder.FindByID(memberID).ToSql()
+	err := sqlx.GetContext(ctx, ext, member, sqlString, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, failure.Translate(err, domain.ErrNotFound, failure.Message("mysql select"))
+			return nil, failure.Translate(err, basic.ErrNotFound, failure.Message("mysql select"))
 		}
 		return nil, failure.Wrap(err, failure.Message("mysql select"))
 	}
@@ -41,24 +45,24 @@ func (repo *MemberRepo) Find(memberID string) (*domain.Member, error) {
 	return member, err
 }
 
-func (repo *MemberRepo) Add(m *domain.Member) error {
-	sqlString, args, _ := repo.sqlBuilder.Add(m).ToSql()
+func (repo *MemberRepo) Append(ctx context.Context, m *domain.Member) (id int64, Err error) {
+	sqlString, args, _ := repo.sqlBuilder.Append(m).ToSql()
 	result, err := repo.db.Exec(sqlString, args...)
 	if err != nil {
-		return failure.Wrap(err, failure.Message("mysql insert"))
+		return 0, failure.Wrap(err, failure.Message("mysql insert"))
 	}
 
+	id, _ = result.LastInsertId()
 	if log.Debug().Enabled() {
-		id, _ := result.LastInsertId()
 		// 由於 memberID 不是用 AUTO INCREMENT, 所以返回零
 		log.Debug().Int64("member_id", id).Msg("MemberRepo mysql insert row:")
 	}
-	return nil
+	return id, nil
 }
 
 type MemberRepoSQLBuilder struct{}
 
-func (MemberRepoSQLBuilder) Find(memberID string) sq.Sqlizer {
+func (MemberRepoSQLBuilder) FindByID(memberID string) sq.Sqlizer {
 	return sq.
 		Select("*").
 		From(TableNameMember).
@@ -66,7 +70,7 @@ func (MemberRepoSQLBuilder) Find(memberID string) sq.Sqlizer {
 		OrderBy("created_date DESC")
 }
 
-func (MemberRepoSQLBuilder) Add(m *domain.Member) sq.Sqlizer {
+func (MemberRepoSQLBuilder) Append(m *domain.Member) sq.Sqlizer {
 	return sq.
 		Insert(TableNameMember).
 		Columns("member_id", "created_date", "self_intro").

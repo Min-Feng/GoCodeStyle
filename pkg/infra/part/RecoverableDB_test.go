@@ -1,6 +1,6 @@
 // +build integration
 
-package mysql
+package part
 
 import (
 	"fmt"
@@ -30,7 +30,7 @@ func TestNewRecoverableDB_SyncRequest(t *testing.T) {
 			count++
 			return nil
 		}
-		return NewDB(&mock.Config.MySQL)
+		return NewMySQL(&mock.Config.MySQL)
 	})
 
 	for i := 1; i <= 50; i++ {
@@ -61,7 +61,7 @@ func TestNewRecoverableDB_AsyncRequest(t *testing.T) {
 			count++
 			return nil
 		}
-		return NewDB(&mock.Config.MySQL)
+		return NewMySQL(&mock.Config.MySQL)
 	})
 
 	// 模擬三波瞬間大量請求

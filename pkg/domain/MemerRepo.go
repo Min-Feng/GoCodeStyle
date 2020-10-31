@@ -1,16 +1,18 @@
 package domain
 
 import (
-	"ddd/pkg/technical/datastruct"
+	"context"
+
+	"ddd/pkg/technical/types"
 )
 
 type MemberRepo interface {
-	Find(memberID string) (*Member, error)
-	Add(m *Member) error
+	FindByID(ctx context.Context, memberID string) (*Member, error)
+	Append(context.Context, *Member) (id int64, Err error)
 }
 
 type Member struct {
-	MemberID    string          `db:"member_id"`
-	CreatedDate datastruct.Time `db:"created_date"`
-	SelfIntro   *string         `db:"self_intro"`
+	MemberID    string     `db:"member_id"`
+	CreatedDate types.Time `db:"created_date"`
+	SelfIntro   *string    `db:"self_intro"`
 }

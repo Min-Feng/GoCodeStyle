@@ -1,4 +1,4 @@
-package mysql
+package part
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/singleflight"
 
-	"ddd/pkg/domain"
+	"ddd/pkg/domain/basic"
 )
 
 func NewRecoverableDB(newDB func() *sqlx.DB) *RecoverableDB {
@@ -52,7 +52,7 @@ func (reDB *RecoverableDB) forUnitTest() (Err error) {
 		// 要注意該函數不可包含 if panicMsg := recover(); panicMsg != nil {
 		if panicMsg := recover(); panicMsg != nil {
 			err := fmt.Errorf("%v", panicMsg)
-			Err = failure.Translate(err, domain.ErrDB)
+			Err = failure.Translate(err, basic.ErrDB)
 			reDB.avoidCrash()
 		}
 	}()

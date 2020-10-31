@@ -8,7 +8,7 @@ import (
 	"github.com/morikuni/failure"
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/domain"
+	"ddd/pkg/domain/basic"
 	"ddd/pkg/technical/logger"
 )
 
@@ -22,7 +22,7 @@ func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 
 	payload := new(Payload)
 	if err := c.ShouldBindJSON(payload); err != nil {
-		Err := failure.Translate(err, domain.ErrValidate)
+		Err := failure.Translate(err, basic.ErrValidate)
 		c.Set("Error", Err)
 		log.Error().Msgf("Show ShouldBindJSON error stack%v", Err)
 		return

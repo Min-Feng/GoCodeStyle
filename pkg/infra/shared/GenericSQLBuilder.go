@@ -1,4 +1,4 @@
-package mysql
+package shared
 
 import (
 	sq "github.com/Masterminds/squirrel"
