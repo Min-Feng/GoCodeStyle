@@ -12,7 +12,7 @@ import (
 
 	"ddd/pkg/domain"
 	"ddd/pkg/domain/basic"
-	"ddd/pkg/infra/shared"
+	"ddd/pkg/technical/uow"
 )
 
 const TableNameMember = "member"
@@ -26,11 +26,11 @@ type MemberRepo struct {
 	sqlBuilder MemberRepoSQLBuilder
 }
 
-func (repo *MemberRepo) FindByID(ctx context.Context, memberID string) (*domain.Member, error) {
-	ext := shared.GetTxOrDB(context.Background(), repo.db)
+func (repo *MemberRepo) FindByID(ctx context.Context, memberID string) (domain.Member, error) {
+	ext := uow.GetTxOrDB(ctx, repo.db)
+	sqlString, args, _ := repo.sqlBuilder.FindByID(memberID).ToSql()
 	member := new(domain.Member)
 
-	sqlString, args, _ := repo.sqlBuilder.FindByID(memberID).ToSql()
 	err := sqlx.GetContext(ctx, ext, member, sqlString, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {

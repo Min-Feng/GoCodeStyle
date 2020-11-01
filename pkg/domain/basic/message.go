@@ -1,4 +1,4 @@
-package domain
+package basic
 
 type Message interface {
 	Kind() MessageKind

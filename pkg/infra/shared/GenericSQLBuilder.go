@@ -6,7 +6,7 @@ import (
 
 type GenericSQLBuilder struct{}
 
-func (GenericSQLBuilder) IsTheRowExist(fieldName string, rowValue interface{}, tableName string) sq.Sqlizer {
+func (GenericSQLBuilder) SelectForUpdate(fieldName string, rowValue interface{}, tableName string) sq.Sqlizer {
 	return sq.
 		Select(fieldName).
 		From(tableName).

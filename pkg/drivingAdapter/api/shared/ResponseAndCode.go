@@ -1,4 +1,4 @@
-package api
+package shared
 
 import (
 	"net/http"
@@ -8,12 +8,12 @@ import (
 
 // Response
 
-var normalResponse = necessaryResponse{
+var NormalResponse = NecessaryResponse{
 	CustomizedCode: 0,
 	Message:        "ok",
 }
 
-type necessaryResponse struct {
+type NecessaryResponse struct {
 	CustomizedCode int    `json:"code"`
 	Message        string `json:"message"`
 }

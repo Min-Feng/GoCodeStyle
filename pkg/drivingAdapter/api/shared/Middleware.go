@@ -1,4 +1,4 @@
-package api
+package shared
 
 import (
 	"github.com/gin-gonic/gin"
@@ -30,7 +30,7 @@ func writeErrorResponse(c *gin.Context, err error) {
 	}
 
 	ErrString := causeErr.ErrorCode()
-	ErrResponse := necessaryResponse{
+	ErrResponse := NecessaryResponse{
 		CustomizedCode: ErrCodeLookup[ErrString].CustomizedCode,
 		Message:        err.Error(),
 	}

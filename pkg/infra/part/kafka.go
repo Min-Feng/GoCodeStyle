@@ -1,10 +1,10 @@
-package kafka
+package part
 
 import (
 	"github.com/segmentio/kafka-go"
 )
 
-func NewWriter(address []string, topic string) *kafka.Writer {
+func NewKafkaWriter(address []string, topic string) *kafka.Writer {
 	return &kafka.Writer{
 		Addr:         kafka.TCP(address...),
 		Topic:        topic,
@@ -25,7 +25,7 @@ func NewWriter(address []string, topic string) *kafka.Writer {
 	}
 }
 
-func NewReader(address []string, topic string) *kafka.Reader {
+func NewKafkaReader(address []string, topic string) *kafka.Reader {
 
 	panic("")
 }

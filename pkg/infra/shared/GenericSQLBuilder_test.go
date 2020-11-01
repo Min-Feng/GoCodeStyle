@@ -22,7 +22,7 @@ type GenericSQLBuilderTestSuite struct {
 }
 
 func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {
-	b := ts.gSQL.IsTheRowExist("member_id", 2, "myTable")
+	b := ts.gSQL.SelectForUpdate("member_id", 2, "myTable")
 	actualNamedSQL := sq.DebugSqlizer(b)
 	expectedSQL := types.StringTool{}.ToRawSQL(`
 SELECT member_id 

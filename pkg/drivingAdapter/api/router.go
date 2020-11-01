@@ -5,6 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"ddd/pkg/drivingAdapter/api/operation"
+	"ddd/pkg/drivingAdapter/api/shared"
 	"ddd/pkg/technical/logger"
 )
 
@@ -21,7 +23,7 @@ func NewRouter(address string, logLevel logger.Level) *Router {
 
 	// c.Next() 之前, 初始化順序, 右到左
 	// c.Next() 之後, 執行順序, 左到右, 也就是說 gin.Logger() 最後執行
-	router.Use(gin.Logger(), gin.Recovery(), ErrorResponseMiddleware)
+	router.Use(gin.Logger(), gin.Recovery(), shared.ErrorResponseMiddleware)
 
 	return &Router{address: address, router: router}
 }
@@ -31,7 +33,7 @@ type Router struct {
 	router  *gin.Engine
 }
 
-func (r *Router) RegisterHandler(dHandler *DebugHandler) {
+func (r *Router) RegisterAPIHandler(dHandler *operation.DebugHandler) {
 	r.router.PUT("debug/logLevel", dHandler.UpdateLogLevel)
 }
 

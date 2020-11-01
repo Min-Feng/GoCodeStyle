@@ -7,7 +7,7 @@ import (
 )
 
 type MemberRepo interface {
-	FindByID(ctx context.Context, memberID string) (*Member, error)
+	FindByID(ctx context.Context, memberID string) (Member, error)
 	Append(context.Context, *Member) (id int64, Err error)
 }
 
