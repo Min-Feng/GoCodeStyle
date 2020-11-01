@@ -10,6 +10,10 @@ import (
 	"ddd/pkg/technical/logger"
 )
 
+func RegisterHandler(r *Router, dHandler *operation.DebugHandler) {
+	r.router.PUT("debug/logLevel", dHandler.UpdateLogLevel)
+}
+
 func NewRouter(address string, logLevel logger.Level) *Router {
 	switch logLevel {
 	case logger.TraceLevel, logger.DebugLevel:
@@ -31,10 +35,6 @@ func NewRouter(address string, logLevel logger.Level) *Router {
 type Router struct {
 	address string
 	router  *gin.Engine
-}
-
-func (r *Router) RegisterAPIHandler(dHandler *operation.DebugHandler) {
-	r.router.PUT("debug/logLevel", dHandler.UpdateLogLevel)
 }
 
 func (r *Router) QuicklyStart() error {

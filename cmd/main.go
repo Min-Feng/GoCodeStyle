@@ -7,9 +7,8 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"ddd/pkg/drivingAdapter/api"
-	"ddd/pkg/drivingAdapter/api/operation"
-	"ddd/pkg/infra/part"
 	"ddd/pkg/technical/configs"
+	"ddd/pkg/technical/injection"
 	"ddd/pkg/technical/logger"
 )
 
@@ -30,20 +29,21 @@ func init() {
 func main() {
 	log.Info().Msg("MainStart")
 
-	cfg := NewConfig()
-	logger.SetGlobal(cfg.LogLevel, logger.WriterKindHuman)
-
-	part.NewMySQL(&cfg.MySQL)
-
-	router := api.NewRouter(":"+cfg.Port, cfg.LogLevel)
-
-	debugHandler := &operation.DebugHandler{}
-	router.RegisterAPIHandler(debugHandler)
-
-	err := router.QuicklyStart()
-	if err != nil {
-
-	}
+	// cfg := NewConfig()
+	// logger.SetGlobal(cfg.LogLevel, logger.WriterKindHuman)
+	//
+	// part.NewMySQL(&cfg.MySQL)
+	//
+	// router := api.NewRouter(":"+cfg.Port, cfg.LogLevel)
+	//
+	// debugHandler := &operation.DebugHandler{}
+	// router.RegisterAPIHandler(debugHandler)
+	//
+	// err := router.QuicklyStart()
+	// if err != nil {
+	//
+	// }
+	injection.HTTPServer(NewConfig)
 }
 
 func NewConfig() *configs.ProjectConfig {
