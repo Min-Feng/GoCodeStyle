@@ -8,27 +8,28 @@ import (
 	"github.com/rs/zerolog/log"
 	"go.uber.org/fx"
 
-	"ddd/pkg/drivingAdapter/api"
 	"ddd/pkg/drivingAdapter/api/operation"
+	api "ddd/pkg/drivingAdapter/api/shared"
 	"ddd/pkg/infra/part"
 	"ddd/pkg/technical/configs"
 	"ddd/pkg/technical/logger"
 )
 
-func HTTPServer(NewConfig func() *configs.ProjectConfig) {
-	newRouter := func(lc fx.Lifecycle, address string, logLevel logger.Level) *api.Router {
-		router := api.NewRouter(address, logLevel)
-		lc.Append(
-			fx.Hook{
-				OnStart: func(context.Context) error {
-					go router.QuicklyStart()
-					return nil
-				},
-				OnStop: nil,
+func newRouter(lc fx.Lifecycle, logLevel logger.Level) *api.Router {
+	router := api.NewRouter(logLevel)
+	lc.Append(
+		fx.Hook{
+			OnStart: func(context.Context) error {
+				go router.Run(":" + "8080")
+				return nil
 			},
-		)
-		return router
-	}
+			OnStop: nil,
+		},
+	)
+	return &router
+}
+
+func HTTPServer(NewConfig func() *configs.ProjectConfig) {
 
 	ioc := fx.New(
 		fx.Provide(
@@ -40,7 +41,7 @@ func HTTPServer(NewConfig func() *configs.ProjectConfig) {
 			},
 		),
 
-		fx.Invoke(api.RegisterHandler),
+		fx.Invoke(RegisterHTTPHandler),
 	)
 	ioc.Run()
 }

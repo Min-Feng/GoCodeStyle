@@ -6,7 +6,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"ddd/pkg/drivingAdapter/api"
+	api2 "ddd/pkg/drivingAdapter/api/shared"
 	"ddd/pkg/technical/configs"
 	"ddd/pkg/technical/injection"
 	"ddd/pkg/technical/logger"
@@ -23,7 +23,7 @@ func init() {
 	logger.Init()
 	logger.DefaultMode()
 	configs.Init()
-	api.Init()
+	api2.Init()
 }
 
 func main() {

@@ -1,4 +1,4 @@
-package shared
+package infra
 
 import (
 	sq "github.com/Masterminds/squirrel"

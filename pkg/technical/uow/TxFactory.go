@@ -22,7 +22,7 @@ import (
 // 而不需要改 repo 函數簽名
 type TxFactory interface {
 	Tx() (driver.Tx, error)
-	ContextWithTx(ctx context.Context) (context.Context, driver.Tx, error)
+	ContextWithTx(ctx context.Context) (ctxTx context.Context, tx driver.Tx, err error)
 }
 
 func NewTxFactory(db *sqlx.DB) *TxFactoryImp {
@@ -37,10 +37,13 @@ func (f *TxFactoryImp) Tx() (driver.Tx, error) {
 	return f.db.Beginx()
 }
 
-func (f *TxFactoryImp) ContextWithTx(ctx context.Context) (context.Context, driver.Tx, error) {
-	tx, err := f.db.Beginx()
-	ctx = context.WithValue(ctx, "uow_tx", tx)
-	return ctx, tx, err
+func (f *TxFactoryImp) ContextWithTx(ctx context.Context) (ctxTx context.Context, tx driver.Tx, err error) {
+	tx, err = f.db.Beginx()
+	if err != nil {
+		return ctx, nil, err
+	}
+	ctxTx = context.WithValue(ctx, "uow_tx", tx)
+	return ctxTx, tx, nil
 }
 
 // GetTxOrDB is used to support that uow.TxFactory's method ContextWithTx

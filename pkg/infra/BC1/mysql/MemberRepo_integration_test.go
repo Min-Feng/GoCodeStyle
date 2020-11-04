@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"ddd/pkg/domain"
-	"ddd/pkg/infra/mysql"
+	"ddd/pkg/infra/BC1/mysql"
 	helperlog "ddd/pkg/infra/part"
 	"ddd/pkg/technical/logger"
 	"ddd/pkg/technical/mock"

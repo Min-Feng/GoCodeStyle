@@ -1,4 +1,4 @@
-package shared_test
+package infra_test
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/stretchr/testify/suite"
 
-	"ddd/pkg/infra/shared"
+	infra "ddd/pkg/infra/shared"
 	"ddd/pkg/technical/logger"
 	"ddd/pkg/technical/mock"
 	"ddd/pkg/technical/types"
@@ -18,7 +18,7 @@ func TestGenericSQLBuilder(t *testing.T) {
 
 type GenericSQLBuilderTestSuite struct {
 	suite.Suite
-	gSQL shared.GenericSQLBuilder
+	gSQL infra.GenericSQLBuilder
 }
 
 func (ts *GenericSQLBuilderTestSuite) TestIsTheRowExist() {

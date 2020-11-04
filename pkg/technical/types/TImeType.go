@@ -16,7 +16,7 @@ var (
 	// TimeLayoutSQLDate     = "2006-01-02"
 )
 
-// datavalue.Time 定義新的時間型別, 是為了處理以下兩種情況
+// Time 定義新的時間型別, 是為了處理以下兩種情況
 //
 // 1. 資料庫欄位 allow NULL datetime 型別
 //
@@ -26,9 +26,9 @@ type Time struct {
 }
 
 /*
- 當 datavalue.Time 為零值, 則寫入資料庫時, 填寫 NULL
+ 當 types.Time 為零值, 則寫入資料庫時, 填寫 NULL
  若 資料庫 datetime 欄位為 NOT NULL
- 則此方法必須改寫, 或創造另一個 datavalue.Time
+ 則此方法必須改寫, 或創造另一個 types.Time
 
  在同一個專案或同一家公司, 不要存在兩種 sql.datetime 限制
 
@@ -85,7 +85,7 @@ func (t *Time) Scan(src interface{}) error {
 
 	err := helperTime.Scan(src)
 	if err != nil {
-		return failure.Wrap(err, failure.Message("datavalue.Time sql Scan"))
+		return failure.Wrap(err, failure.Message("Time sql Scan"))
 	}
 
 	t.Time = helperTime.Time

@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"ddd/pkg/domain/basic"
-	"ddd/pkg/drivingAdapter/api/shared"
+	api "ddd/pkg/drivingAdapter/api/shared"
 	"ddd/pkg/technical/logger"
 )
 
@@ -43,5 +43,5 @@ func (h *DebugHandler) UpdateLogLevel(c *gin.Context) {
 	log.Info().Str("logLevel", payload.LogLevel).Msg("Set loglevel successfully")
 
 	// 已經執行 return response, 後續的 middleware 就不要再次對 response 進行操作
-	c.JSON(http.StatusOK, shared.NormalResponse)
+	c.JSON(http.StatusOK, api.NormalResponse)
 }
