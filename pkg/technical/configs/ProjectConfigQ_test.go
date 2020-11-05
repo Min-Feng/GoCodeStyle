@@ -21,7 +21,7 @@ type ProjectConfigRepoTestSuite struct {
 func (ts *ProjectConfigRepoTestSuite) TestFind() {
 	tests := []struct {
 		name               string
-		repo               configs.ProjectConfigRepo
+		repo               configs.ProjectConfigRepoQ
 		expectedConfigName string
 	}{
 		{
@@ -45,7 +45,7 @@ func (ts *ProjectConfigRepoTestSuite) TestFind() {
 	for _, tt := range tests {
 		tt := tt
 		ts.Run(tt.name, func() {
-			actualConfig := tt.repo.Find()
+			actualConfig := tt.repo.QueryConfig()
 			assert.Equal(ts.T(), tt.expectedConfigName, actualConfig.Name)
 		})
 	}

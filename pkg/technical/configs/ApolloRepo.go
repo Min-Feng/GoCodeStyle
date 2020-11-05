@@ -13,11 +13,11 @@ const (
 	ApolloNamespaces = "application"
 )
 
-func NewApolloRepo(remoteAddress string) ProjectConfigRepo {
+func NewApolloRepo(remoteAddress string) ProjectConfigRepoQ {
 	return newApolloRepo(remoteAddress, ApolloAppID, ApolloCluster, ApolloNamespaces)
 }
 
-func newApolloRepo(remoteAddress string, appID string, clusterName string, namespace string) ProjectConfigRepo {
+func newApolloRepo(remoteAddress string, appID string, clusterName string, namespace string) ProjectConfigRepoQ {
 	remote.SetAppID(appID)
 	remote.SetConfigType("prop")
 	remote.SetAgolloOptions(

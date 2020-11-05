@@ -6,8 +6,8 @@ import (
 	"ddd/pkg/technical/logger"
 )
 
-type ProjectConfigRepo interface {
-	Find() *ProjectConfig
+type ProjectConfigRepoQ interface {
+	QueryConfig() *ProjectConfig
 }
 
 type ProjectConfig struct {

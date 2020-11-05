@@ -10,7 +10,7 @@ import (
 )
 
 // configPath 設置多個, 是因為二進位執行檔, 可能在 go module 根目錄執行 或 cmd 目錄執行
-func NewLocalRepo(configFileName string) ProjectConfigRepo {
+func NewLocalRepo(configFileName string) ProjectConfigRepoQ {
 	if configFileName == "" {
 		log.Fatal().Msg("Not found: configFileName is empty")
 	}

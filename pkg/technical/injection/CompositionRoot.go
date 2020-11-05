@@ -47,7 +47,7 @@ func HTTPServer(NewConfig func() *configs.ProjectConfig) {
 }
 
 func NewConfig() *configs.ProjectConfig {
-	var repo configs.ProjectConfigRepo
+	var repo configs.ProjectConfigRepoQ
 
 	src := strings.ToLower(os.Getenv("CONF_SRC"))
 	switch src {
@@ -62,7 +62,7 @@ func NewConfig() *configs.ProjectConfig {
 	}
 
 	//noinspection GoNilness
-	cfg := repo.Find()
+	cfg := repo.QueryConfig()
 	log.Info().Msg("New Project Config successfully")
 	return cfg
 }

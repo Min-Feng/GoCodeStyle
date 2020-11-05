@@ -42,16 +42,31 @@ func (f *TxFactoryImp) ContextWithTx(ctx context.Context) (ctxTx context.Context
 	if err != nil {
 		return ctx, nil, err
 	}
-	ctxTx = context.WithValue(ctx, "uow_tx", tx)
+	ctxTx = context.WithValue(ctx, f.db, tx) // 表示是 這個 db 的 tx 連線
 	return ctxTx, tx, nil
 }
 
-// GetTxOrDB is used to support that uow.TxFactory's method ContextWithTx
-func GetTxOrDB(ctx context.Context, db *sqlx.DB) (ext sqlx.ExtContext) {
+// ExecWithTxOrDB is used to support that uow.TxFactory's method ContextWithTx
+func ExecWithTxOrDB(ctx context.Context, db *sqlx.DB) (sqlExec sqlx.ExtContext) {
 	if ctx == nil {
 		panic("ctx context.Context is nil")
 	}
-	externalTx, ok := ctx.Value("uow_tx").(*sqlx.Tx)
+
+	// 如果是不同 db 的 tx 連線
+	// 則在自己的聚合內, 完成事務交易即可
+	// 不和其他聚合合作
+	externalTx, ok := ctx.Value(db).(*sqlx.Tx)
+	if ok {
+		return externalTx
+	}
+	return db
+}
+
+func ReadWithTxOrDB(ctx context.Context, db *sqlx.DB) (sqlExe sqlx.QueryerContext) {
+	if ctx == nil {
+		panic("ctx context.Context is nil")
+	}
+	externalTx, ok := ctx.Value(db).(*sqlx.Tx)
 	if ok {
 		return externalTx
 	}

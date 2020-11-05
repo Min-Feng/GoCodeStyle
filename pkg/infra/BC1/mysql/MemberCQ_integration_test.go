@@ -18,7 +18,7 @@ import (
 func TestMemberRepo_Add(t *testing.T) {
 	logger.DeveloperMode()
 	db := helperlog.NewMySQL(&mock.Config.MySQL)
-	repo := mysql.NewMemberRepo(db)
+	repo := mysql.NewMemberRepoCQ(db)
 
 	tests := []struct {
 		name   string
@@ -41,7 +41,7 @@ func TestMemberRepo_Add(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := repo.Append(nil, tt.member)
+			_, err := repo.AppendMember(nil, tt.member)
 			assert.NoError(t, err)
 		})
 	}
@@ -51,8 +51,8 @@ func TestMemberRepo_Find(t *testing.T) {
 	logger.DeveloperMode()
 	cfg := mock.Config
 	db := helperlog.NewMySQL(&cfg.MySQL)
-	repo := mysql.NewMemberRepo(db)
+	repo := mysql.NewMemberRepoCQ(db)
 
-	_, err := repo.FindByID(nil, "c5")
+	_, err := repo.FindByMemberID(nil, "c5", false)
 	assert.NoError(t, err)
 }

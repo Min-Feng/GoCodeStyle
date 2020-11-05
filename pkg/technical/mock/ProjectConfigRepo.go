@@ -6,7 +6,7 @@ import (
 
 type ProjectConfigRepo struct{}
 
-func (ProjectConfigRepo) Find() *configs.ProjectConfig {
+func (ProjectConfigRepo) QueryConfig() *configs.ProjectConfig {
 	return &configs.ProjectConfig{
 		Name: "mock",
 	}

@@ -13,7 +13,7 @@ type ProjectConfigRepoImp struct {
 	*viper.Viper
 }
 
-func (repo *ProjectConfigRepoImp) Find() *ProjectConfig {
+func (repo *ProjectConfigRepoImp) QueryConfig() *ProjectConfig {
 	cfg := new(ProjectConfig)
 
 	option := func(c *mapstructure.DecoderConfig) { c.TagName = "configs" }
