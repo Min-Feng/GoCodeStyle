@@ -3,21 +3,22 @@
 package mysql_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"ddd/pkg/domain"
 	"ddd/pkg/infra/BC1/mysql"
-	helperlog "ddd/pkg/infra/part"
+	"ddd/pkg/infra/part"
 	"ddd/pkg/technical/logger"
 	"ddd/pkg/technical/mock"
 	"ddd/pkg/technical/types"
 )
 
-func TestMemberRepo_Add(t *testing.T) {
+func TestMemberRepoCQ_Append(t *testing.T) {
 	logger.DeveloperMode()
-	db := helperlog.NewMySQL(&mock.Config.MySQL)
+	db := part.NewMySQL(&mock.Config.MySQL)
 	repo := mysql.NewMemberRepoCQ(db)
 
 	tests := []struct {
@@ -41,18 +42,18 @@ func TestMemberRepo_Add(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := repo.AppendMember(nil, tt.member)
+			_, err := repo.AppendMember(context.Background(), tt.member)
 			assert.NoError(t, err)
 		})
 	}
 }
 
-func TestMemberRepo_Find(t *testing.T) {
+func TestMemberRepoCQ_Query(t *testing.T) {
 	logger.DeveloperMode()
 	cfg := mock.Config
-	db := helperlog.NewMySQL(&cfg.MySQL)
+	db := part.NewMySQL(&cfg.MySQL)
 	repo := mysql.NewMemberRepoCQ(db)
 
-	_, err := repo.FindByMemberID(nil, "c5", false)
+	_, err := repo.QueryByMemberID(context.Background(), "c5", false)
 	assert.NoError(t, err)
 }

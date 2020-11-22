@@ -14,7 +14,7 @@ import (
 // 與其他的聚合不會同步
 //
 // 不希望 repo 函數簽名太醜
-// 所以用 context.WithValue 將 driver.Tx 包在 ctx
+// 所以用 context.WithValue 將 driver.Tx 包在 ctxTx
 //
 // 日後有機會遭遇 使用人數大幅提昇
 // 為了優化使用者的體驗時間
@@ -22,7 +22,7 @@ import (
 // 而不需要改 repo 函數簽名
 type TxFactory interface {
 	Tx() (driver.Tx, error)
-	ContextWithTx(ctx context.Context) (ctxTx context.Context, tx driver.Tx, err error)
+	ContextTx(ctx context.Context) (ctxTx context.Context, tx driver.Tx, err error)
 }
 
 func NewTxFactory(db *sqlx.DB) *TxFactoryImp {
@@ -37,48 +37,55 @@ func (f *TxFactoryImp) Tx() (driver.Tx, error) {
 	return f.db.Beginx()
 }
 
-func (f *TxFactoryImp) ContextWithTx(ctx context.Context) (ctxTx context.Context, tx driver.Tx, err error) {
+func (f *TxFactoryImp) ContextTx(ctx context.Context) (ctxTx context.Context, tx driver.Tx, err error) {
 	tx, err = f.db.Beginx()
 	if err != nil {
 		return ctx, nil, err
 	}
-	ctxTx = context.WithValue(ctx, f.db, tx) // 表示是 這個 db 的 tx 連線
+	ctxTx = context.WithValue(ctx, f.db, tx) // 表示 tx 連線, 來自同一個 db
 	return ctxTx, tx, nil
 }
 
-// ExecWithTxOrDB is used to support that uow.TxFactory's method ContextWithTx
-func ExecWithTxOrDB(ctx context.Context, db *sqlx.DB) (sqlExec sqlx.ExtContext) {
+// GetDBOrTxByContext is used to support that uow.TxFactory's method ContextTx.
+// 如果是不同 db 的 tx 連線
+// 則在自己的聚合內, 完成事務交易即可
+// 不和其他聚合合作
+// 或者在應用層另外安排 Two-phase Commit
+func GetDBOrTxByContext(db *sqlx.DB, ctx context.Context) (RDBMS sqlx.ExtContext) {
 	if ctx == nil {
 		panic("ctx context.Context is nil")
 	}
 
-	// 如果是不同 db 的 tx 連線
-	// 則在自己的聚合內, 完成事務交易即可
-	// 不和其他聚合合作
 	externalTx, ok := ctx.Value(db).(*sqlx.Tx)
-	if ok {
-		return externalTx
+	if !ok {
+		return db
 	}
-	return db
+	return externalTx
 }
 
-func ReadWithTxOrDB(ctx context.Context, db *sqlx.DB) (sqlExe sqlx.QueryerContext) {
-	if ctx == nil {
-		panic("ctx context.Context is nil")
+// GetDBOrTx is used to support that uow.TxFactory's method Tx.
+// 如果是不同 db 的 tx 連線
+// 則在自己的聚合內, 完成事務交易即可
+// 不和其他聚合合作
+// 或者在應用層另外安排 Two-phase Commit
+func GetDBOrTx(db *sqlx.DB, tx driver.Tx) (RDBMS sqlx.ExtContext) {
+	if tx == nil {
+		return db
 	}
-	externalTx, ok := ctx.Value(db).(*sqlx.Tx)
-	if ok {
-		return externalTx
-	}
-	return db
+	externalTx := tx.(*sqlx.Tx)
+	return externalTx
 }
 
 // HandleErrorByRollback
 // 參數 err 代表外部錯誤, 預期不等於 nil
 // 回傳 nil 代表 rollback 成功
-// 依據業務 有不同的錯誤處理方式
-// rollback 成功不代表 已經處理 外部錯誤
+// rollback 成功, 記得要另外處理外部錯誤
+// 依據業務 外部錯誤 有不同的處理方式
 func HandleErrorByRollback(err error, tx driver.Tx) (rollbackErr error) {
+	if tx == nil {
+		return nil
+	}
+
 	if err != nil {
 		if rollbackErr = tx.Rollback(); rollbackErr != nil {
 			return rollbackErr

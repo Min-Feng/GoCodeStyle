@@ -7,8 +7,8 @@ import (
 )
 
 type MemberRepoCQ interface {
-	FindByMemberID(ctx context.Context, memberID string, isUpdate bool) (member Member, err error)
 	AppendMember(context.Context, *Member) (id int64, Err error)
+	QueryByMemberID(ctx context.Context, memberID string, inWriteMode bool) (member Member, err error)
 }
 
 type Member struct {
